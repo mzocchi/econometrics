@@ -14,7 +14,10 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 
 #### Preliminary steps in Stata:  
 * Download "raw" data from LATTE or [here](coronary-3.csv)
-<a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata
+* 
 * Save Stata dta file in a folder 
 * Begin a log by clicking on the “Log” icon on the top center panel; save the log in the designated folder.
 * Begin a “Do-file” by clicking on the icon on the top center panel; save the do-file in the designated folder.
+
+
+<a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata
