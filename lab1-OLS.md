@@ -21,9 +21,11 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 ### Objective 1: Review Stata codes for descriptive statistics and linear regression
 **A. Codes for univariate and bivariate statistics**
 * *Describe*, *summarize*, and *codebook* are some Stata commands that will provide a general illustration of your dataset.  Information such as the averages, min, max, and standard deviations may be obtained from summarize and codebook. Describe will give you a general sense of the variable types and variable definitions as recorded in the dataset.   
+```s/
     describe  
     summarize  
     codebook, compact  
+```
 * For continuous variables, it may be helpful to explore their correlations with one another using pwcorr.  You can also obtain a graph of the correlations and use the half option to avoid redundant output.  
     pwcorr edfat meat, sig  
     graph matrix chd-wine, half
