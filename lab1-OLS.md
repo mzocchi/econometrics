@@ -27,3 +27,17 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 * For continuous variables, it may be helpful to explore their correlations with one another using pwcorr.  You can also obtain a graph of the correlations and use the half option to avoid redundant output.  
     pwcorr edfat meat, sig  
     graph matrix chd-wine, half
+
+**B. Codes for linear regression and saving estimates, residuals, & predicted values**
+* The common command for OLS regression is *reg* ("regression"), which is followed by the dependent variable then independent variables. 
+    reg chd cal-wine
+* *Est* ("estimates") is a post-estimation command, meaning that you must run a model before using this command. Here, we want to save the estimates of the regression model we previously ran under the name “m1”.
+    est store m1
+* Obtain & label the residuals for the observations that are used in the regression model.  
+The residuals will be important for testing OLS assumptions later.  We restrict this prediction to only observations used in the current model, as indicated by the e(sample) option.  
+    predict r if e(sample), resid
+    label var r “residuals”
+* Obtain & label the standardized residuals for the observations that are used in the regression model.  
+We obtain the standardized residuals by dividing them by the standard error.  Standardization sets the mean of the residuals at zero and standard deviation at 1.0.  Thus, if the distribution of the residuals is normal, then we can expect that 95% of the residuals fall between two standard deviations of the mean on both sides.  Likewise, we expect that approximately 5% of the residuals will be beyond this region.  
+    predict rstd if e(sample), rstandard
+
