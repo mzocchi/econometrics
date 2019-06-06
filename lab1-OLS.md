@@ -89,7 +89,13 @@ We obtain the standardized residuals by dividing them by the standard error.  St
 ```
     linktest
 ```
-* *Ovtest* in Stata should be used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables. Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
+Equivalant to the *linktest*
+```
+    gen yhat2 = yhat^2
+    reg chd yhat yhat2
+```
+
+* *Ovtest* is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables. Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
 ```
     estat ovtest
 ```
@@ -101,6 +107,10 @@ We obtain the standardized residuals by dividing them by the standard error.  St
 * We can detect heteroskedasticity by plotting the residuals against the predicted values.  If the model is well-fitted, there should be no obvious pattern in the graph, indicating that the variance of the residuals is constant.
 ```
     rvfplot, yline(0)
+```
+Equivalent to *rvfplot*
+```
+    scatter yhat r, yline(0)
 ```
 * Two other popular tests for heteroskedasticity are White’s test (*imtest*) and Breusch-Pagan test (*hettest*). Both test the null hypothesis that the variance of the residuals are homogenous.  Thus, if the tests are significant, there is evidence of heteroskedasticity.
 ```
