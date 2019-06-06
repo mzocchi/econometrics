@@ -21,3 +21,4 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 
 
 <a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata
+<a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata.
