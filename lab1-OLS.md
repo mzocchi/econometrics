@@ -115,3 +115,14 @@ We obtain the standardized residuals by dividing them by the standard error.  St
     pnorm r
     qnorm r
 ```
+Here are some examples of what normally distributed errors look like:
+**kernal density plot:**  
+![Example of Normality of Errors 1](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar35.gif)  
+**standardized normal probability (P-P) plot:**  
+![Example of Normality of Errors 2](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar36.gif)  
+
+Another test available is the Shapiro-Wilk W test for normality. The p-value is based on the assumption that the distribution of the residuals is normal. A large pvalue (>0.05) indicates that we cannot reject the assumption that r is normally distributed.
+```
+    swilk r
+```
+
