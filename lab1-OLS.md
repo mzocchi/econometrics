@@ -14,11 +14,16 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 
 #### Preliminary steps in Stata:  
 * Download "raw" data from LATTE or [here](coronary-3.csv)
-* 
-* Save Stata dta file in a folder 
-* Begin a log by clicking on the “Log” icon on the top center panel; save the log in the designated folder.
+* <a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata
+* Save Stata dta file in a folder
 * Begin a “Do-file” by clicking on the icon on the top center panel; save the do-file in the designated folder.
 
-
-<a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata
-<a href="https://youtu.be/60RBNsqzL6I" target="_blank">Import</a> raw data into Stata.
+### Objective I: Stata overview
+**A. Codes for univariate and bivariate statistics**
+* *Describe*, *summarize*, and *codebook* are some Stata commands that will provide a general illustration of your dataset.  Information such as the averages, min, max, and standard deviations may be obtained from summarize and codebook. Describe will give you a general sense of the variable types and variable definitions as recorded in the dataset.   
+  describe  
+  summarize  
+  codebook, compact  
+* For continuous variables, it may be helpful to explore their correlations with one another using pwcorr.  You can also obtain a graph of the correlations and use the half option to avoid redundant output.  
+  pwcorr edfat meat, sig  
+  graph matrix chd-wine, half
