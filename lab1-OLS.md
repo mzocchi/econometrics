@@ -52,10 +52,13 @@ We obtain the standardized residuals by dividing them by the standard error.  St
     predict rstd if e(sample), rstandard
 ```
 * Obtain & label predicted values of the dependent variable (chd)  
-    predict yhat
-    label var yhat "predicted values of Chd from m1"
+```    
+    predict yhat  
+    label var yhat "predicted values of Chd from m1"  
+```
 ### Objective 2: Check OLS Assumptions
-**Assumption 1: Linearity (linear in parameters):**  
+
+**Assumption 1: Linearity (the relationships between the predictors and the outcome variable should be linear):**  
 * If there is only one predictor, we can use a scatterplot to detect if the relationship between X1 and Y is linear.  We can use the *lfit* command to show a linear fit.  Adding a lowess (locally weighted scatterplot smoothing) curve can help us detect for nonlinearity.  
 ```
     twoway (scatter chd cal) (lfit chd cal) (lowess chd cal)  
@@ -64,4 +67,25 @@ We obtain the standardized residuals by dividing them by the standard error.  St
 ```
     scatter rstd cal  
     scatter rstd unemp  
+```
+
+**B. Assumption 2: Random Sampling**  
+* This is not directly testable in Stata. This assumption is satisified (or not) based on the sampling design of our data.  
+
+**C. Assumption 3: No perfect collinearity (no multicollinearity)**
+* This assumption refers to perfectly correlated independent variables.  We simply test this assumption by examining the correlations between the independent variables in our data.  A similar issue is multicollinearity, which is when independent variables are highly correlated but not perfectly correlated.  We can examine the variance inflation factor (VIF) of each variable to determine if multicollinearity is an issue.  VIF values greater than 10.0 suggests multicollinearity.  Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
+```
+    est restore m1
+    estat vif
+```
+
+**D. Assumption 4: Zero conditional mean**
+* The three main problems that cause the zero conditional mean assumption to fail in a regression model are: 1) improper specification of the model, such as omitted variables 2) endogeneity of one or more independent variables, and 3) measurement error of one or more independent variables.  Explanatory variables are “exogenous” if they do not correlate with the error term, which is a good thing.  If they do, they are considered endogenous.  
+* *Linktest* command detects model misspecification by regressing the dependent variable on the predicted values (yhat) and the predicted values squared (hatsq).  The idea is that if the model was specified correctly, then no other additional independent variables should be significant except by chance. Thus, we should expect the predicted value (yhat) to be significant because it was predicted from the model and the squared variable (hatsq) to be insignificant if the model is specified properly. If hatsq is significant, then the linktest concludes that there may be omitted variables.
+```
+    linktest
+```
+* *Ovtest* in Stata should be used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables. Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
+```
+    estat ovtest
 ```
