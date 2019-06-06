@@ -11,4 +11,4 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 
 Model:
 
-<img src="https://latex.codecogs.com/svg.latex?Chd&space;=&space;\beta&space;_{0}&plus;\beta_{1}Cal&plus;\beta_{2}Unemp&plus;\beta_{3}Cig&plus;\beta_{4}Edfat&space;&plus;\beta_{5}Meat&plus;\beta_{6}Spirits&plus;\beta_{7}Beer&plus;\beta_{8}Wine&plus;\mu" title="Chd = \beta _{0}+\beta_{1}Cal+\beta_{2}Unemp+\beta_{3}Cig+\beta_{4}Edfat +\beta_{5}Meat+\beta_{6}Spirits+\beta_{7}Beer+\beta_{8}Wine+\mu" />
+<img src="https://latex.codecogs.com/gif.latex?Chd&space;=&space;\beta_{0}&plus;\beta_{1}Cal&plus;\beta_{2}Unemp&plus;\beta_{3}Cig&plus;\beta_{4}Edfat&plus;\beta_{5}Meat&plus;\beta_{6}Spirits&plus;\beta_{7}Beer&plus;\beta_{8}Wine&plus;\mu" title="Chd = \beta_{0}+\beta_{1}Cal+\beta_{2}Unemp+\beta_{3}Cig+\beta_{4}Edfat+\beta_{5}Meat+\beta_{6}Spirits+\beta_{7}Beer+\beta_{8}Wine+\mu" />
