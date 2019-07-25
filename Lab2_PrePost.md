@@ -52,6 +52,7 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 * Start with an overall model pooling both years together (i.e. do not put year in the model)
 * lwage = b0 + b1(female) + b2(educ) + b3(exper) + b4(expersq) + b5(union) + u
 <img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2educ%20&plus;%20B_3exper%20&plus;%20B_4expersq%20&plus;%20B_5union%20&plus;%20u" />  
+
 ```
 	regress lwage female educ exper expersq union
 	estimates store m1
