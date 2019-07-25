@@ -39,7 +39,7 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 ```
 * If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).
 ```
-  ttest wage, by(year) unequal
+	ttest wage, by(year) unequal
 ```
 * However, there are alternatives that are preferred in the case of skewed data.  
 Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
@@ -51,10 +51,10 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 #### Pooled model design for pre-post analysis
 * Start with an overall model pooling both years together (i.e. do not put year in the model)
 * lwage = b0 + b1(female) + b2(educ) + b3(exper) + b4(expersq) + b5(union) + u
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2educ%20&plus;%20B_3exper%20&plus;%20B_4expersq%20&plus;%20B_5union%20&plus;%20u" />
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2educ%20&plus;%20B_3exper%20&plus;%20B_4expersq%20&plus;%20B_5union%20&plus;%20u" />  
 ```
 	regress lwage female educ exper expersq union
-	est store m1
+	estimates store m1
 ```
 * for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change. 
 ```
@@ -62,26 +62,30 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 ```
 * Now add in a covariate to control for survey year (y85)
 * lwage = b0 + b1(y85) + b2(female) + b3(educ) + b4(exper) + b5(expersq) + b6(union) + u
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />
-```	
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />  
+```
 	regress lwage y85 female educ exper expersq union
 	est store m2
 ```
-* Let's compare models in a table
+* Let's compare models in a table  
+```
 	esttab m1 m2, b(%7.4f) se star stats(N r2 r2_a)
-
+```
 * I hypothosize that the difference in wages between females and males may have changed between 1978 and 1985
+```
 	table year female, c(mean lwage)
-	
+```
 * It appears that the difference may have declined between 1978 and 1985. To test this formally, we include an interaction term:
-	* We can create an interaction term
-		gen y85fem = y85*female
-		label var y85fem "Females in 1985"
-
-	* lwage = b0 + b1(y85) + b2(female) + b3(y85fem) + b4(educ) + b5(exper) + b6(expersq) + b6(union) + u
-		reg lwage y85 female y85fem educ exper expersq union 
-		est store m3
-
+* We can create an interaction term
+```
+	gen y85fem = y85*female
+	label var y85fem "Females in 1985"
+```
+* lwage = b0 + b1(y85) + b2(female) + b3(y85fem) + b4(educ) + b5(exper) + b6(expersq) + b6(union) + u
+```
+	reg lwage y85 female y85fem educ exper expersq union 
+	est store m3
+```
 * Now compare all three models:
 	esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 	
