@@ -141,6 +141,14 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 ```
 * From the plot, it looks like the effect of experience on wages is about the same in 1978 as it was in 1985. This is confirmed by the fact that our interaction term in the regression model is very small and not signficant.
 
+#### Regression with centered variables
+* Sometimes, we center variables on a meaningful value for easier interpretation.  For instance, we may center a “years of education” variable at 12 years.  Doing so would allow us to interpret the variable’s beta coefficient as the effect of an additional year of college education, holding everything else constant.  Below is an example of generating a new education variable centered at the 12th year.
+```
+	gen c_educ= (educ-12)
+	regress lwage y85 female y85fem c_educ exper expersq union
+```
+* Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1975 (y85=0 and y85fem = 0) for people with a high school education (c_educ=0) without any experience (exper = 0 and expersq = 0).
+
 #### Extra
 * We can include an interaction term in the regression model using ## instead of generating a new variable.
 ```
