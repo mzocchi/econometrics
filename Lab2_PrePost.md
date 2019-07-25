@@ -1,44 +1,42 @@
 # Lab 2. Pre Post
 
+### Goal: To estimate OLS regression models in Stata for pre-post study designs
 
+### Objectives: 
+1. Estimate and interpret a regression model for a pre-post study
+2. Complete a difference-in-differences table by hand
 
+### Research Questions: 
+1. Is there a wage difference between 1978 and 1985, controlling for other factors? Does this effect differ by gender?
 
+### Dataset: 
+Pooled cross sectional dataset of individuals’ hourly wages and related predictors of two time periods, 1978 and 1985. (N= 1,084 observations)
+
+### Model:
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6exper2%20&plus;%20B_7union%20&plus;%20u" />
+
+#### Preliminary steps in Stata:  
+* Download/unzip the Lab2_PrePost folder from LATTE  
+* Open lab2.do  
+* Set working directory and open dta file
 ```
-/******************************  METADATA *********************************  
-Lab 2: Two-period pre-post analysis  
-Pooled models for difference-in-differences  
-Dataset: Current Population Survey (CPS) 1978/1985  
-2019-Sept-XX  
-HS-409A: Applied Econometrics  
-**************************************************************************/
+        cd "C:\Heller\409A\Lab2_PrePost"  
+        use "Wage.dta", clear 
 ```
-* ----------------------------------- *
-* Preliminary steps                   *
-* ----------------------------------- *
-
-* Change working directory
-	cd "H:\Examples\PrePost\pre-post_lab2"
-
-* Open dta
-	use "Pre-Post_Design_Lab.dta", clear
-
-* ----------------------------------- *
-* Descriptive statistics           *
-* ----------------------------------- *
+#### Descriptive Statistics
+```
 	summarize
 	codebook, compact
 	bysort year: sum wage
 	sdtest wage, by(year)
 	ttest wage, by(year) unequal
-	
-* ----------------------------------- *
-* Log transformation               *
-* ----------------------------------- *	
-
+```
+#### Log Transformation
 * Do wages follow a normal distribution? 
+```
 	hist wage, norm
 	qnorm wage
-
+```
 * If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).
 	ttest wage, by(year) unequal
 
