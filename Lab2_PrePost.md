@@ -147,7 +147,7 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	gen c_educ= (educ-12)
 	regress lwage y85 female y85fem c_educ exper expersq union
 ```
-* Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1975 (y85=0 and y85fem = 0) for people with a high school education (c_educ=0) without any experience (exper = 0 and expersq = 0).
+* Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
 
 #### Extra
 * We can include an interaction term in the regression model using ## instead of generating a new variable.
