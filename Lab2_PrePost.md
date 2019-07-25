@@ -13,7 +13,7 @@
 Pooled cross sectional dataset of individuals’ hourly wages and related predictors of two time periods, 1978 and 1985. (N= 1,084 observations)
 
 ### Model:
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6exper2%20&plus;%20B_7union%20&plus;%20u" />
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
 
 #### Preliminary steps in Stata:  
 * Download/unzip the Lab2_PrePost folder from LATTE  
@@ -38,36 +38,35 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 	qnorm wage
 ```
 * If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).
+```
 	ttest wage, by(year) unequal
-
+```
 * However, there are alternatives that are preferred in the case of skewed data. 
-	* 1. Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
-		qnorm lwage
-		sdtest lwage, by(year)
-		ttest lwage, by(year)
-				
-* ----------------------------------- *
-* 	Pooled model design for          *
-*    pre-post analysis                *
-* ----------------------------------- *
-
+1. Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
+```
+	qnorm lwage
+	sdtest lwage, by(year)
+	ttest lwage, by(year)
+```
+#### Pooled model design for pre-post analysis
 * Start with an overall model pooling both years together (i.e. do not put year in the model)
-	
-	* lwage = b0 + b1(female) + b2(educ) + b3(exper) + b4(expersq) + b5(union) + u
-	
-		regress lwage female educ exper expersq union
-		est store m1
-	
-	* for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change. 
+* lwage = b0 + b1(female) + b2(educ) + b3(exper) + b4(expersq) + b5(union) + u
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2educ%20&plus;%20B_3exper%20&plus;%20B_4expersq%20&plus;%20B_5union%20&plus;%20u" />
+```
+	regress lwage female educ exper expersq union
+	est store m1
+```
+* for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change. 
+```
 	di exp(-.25)-1
-
+```
 * Now add in a covariate to control for survey year (y85)
-	
-	* lwage = b0 + b1(y85) + b2(female) + b3(educ) + b4(exper) + b5(expersq) + b6(union) + u
-	
-		regress lwage y85 female educ exper expersq union
-		est store m2
-
+* lwage = b0 + b1(y85) + b2(female) + b3(educ) + b4(exper) + b5(expersq) + b6(union) + u
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />
+```	
+	regress lwage y85 female educ exper expersq union
+	est store m2
+```
 * Let's compare models in a table
 	esttab m1 m2, b(%7.4f) se star stats(N r2 r2_a)
 
