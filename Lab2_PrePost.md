@@ -97,25 +97,25 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 * Use these values to find the D-i-D effect:
 ```
 	* Men in '78 -- reference group:
-	margins, at(y85=0 female=0 y85fem=0)
+		margins, at(y85=0 female=0 y85fem=0)
 
 	* Women in '78
-	margins, at(y85=0 female=1 y85fem=0)
+		margins, at(y85=0 female=1 y85fem=0)
 
 	* Men in '85
-	margins, at(y85=1 female=0 y85fem=0)
+		margins, at(y85=1 female=0 y85fem=0)
 
 	* Women in '85
-	margins, at(y85=1 female=1 y85fem=1)
+		margins, at(y85=1 female=1 y85fem=1)
 	
 	* difference between men and women in 1978:
-	di 1.807-1.487
+		di 1.807-1.487
 	
 	* difference between men and women in 1985:
-	di 2.160-1.929
+		di 2.160-1.929
 	
 	* difference-in-difference:
-	di 0.32 - 0.231
+		di 0.32 - 0.231
 ```
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
 ```
