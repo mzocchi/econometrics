@@ -39,10 +39,10 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 ```
 * If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).
 ```
-	ttest wage, by(year) unequal
+  ttest wage, by(year) unequal
 ```
-* However, there are alternatives that are preferred in the case of skewed data. 
-1. Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
+* However, there are alternatives that are preferred in the case of skewed data.  
+Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
 ```
 	qnorm lwage
 	sdtest lwage, by(year)
