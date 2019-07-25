@@ -19,7 +19,7 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 ```
     cd "C:\Heller\409A\LAB1_OLS"  
     * or, you can go to File --> Change Working Directory
-    import 
+    import delimited coronary.csv
 ```
 ### Objective 1: Review Stata codes for descriptive statistics and linear regression
 **A. Codes for univariate and bivariate statistics**
