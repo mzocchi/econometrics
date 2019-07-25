@@ -15,11 +15,10 @@ Dataset: Annual mortality rates due to heart disease and other potentially relat
 #### Preliminary steps in Stata:  
 * Download/unzip LAB1_OLS folder from LATTE  
 * Open lab1.do  
-* Set working directory and import dataset
+* Set working directory and import "raw" data
 ```
-    cd "C:\Heller\409A\LAB1_OLS"  
-    * or, you can go to File --> Change Working Directory
-    import delimited coronary.csv
+        cd "..."  
+        import delimited coronary-3.csv, clear
 ```
 ### Objective 1: Review Stata codes for descriptive statistics and linear regression
 **A. Codes for univariate and bivariate statistics**
