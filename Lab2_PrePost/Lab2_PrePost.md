@@ -10,7 +10,7 @@ August XX, 2019
 2. Complete a difference-in-differences table by hand
 
 ### Research Questions: 
-1. Is there a wage difference between 1978 and 1985, controlling for other factors? Does this difference  by gender?
+1. Was there a wage difference between 1978 and 1985, controlling for other factors? Did this difference differ by gender?
 
 ### Dataset: 
 Pooled cross sectional dataset of individuals’ hourly wages and related predictors of two time periods, 1978 and 1985. (N= 1,084 observations)
