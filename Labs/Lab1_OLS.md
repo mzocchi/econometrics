@@ -25,7 +25,25 @@ Annual mortality rates due to heart disease and other potentially related variab
 
 ```
   cd "C:\Heller\409A\Lab1_OLS"  
-  import delimited coronary-3.csv, clear
+  import delimited coronary.csv, clear
+```
+* **Label** the dataset and variables
+
+```
+  label data "US rates of mortality due to heart disease"
+  label var chd "Deaths due to coronary heart disease"
+  label var cal "Per capita consumption of calcium per day"
+  label var unemp "Percentage of civilian labor force unemployed"
+  label var cig "Per capita consumption of cigarettes in pounds of Tobacco"
+  label var edfat "Per capita intake of edible fats and oil, in pounds"
+  label var meat "Per capita intake of meat in pounds"
+  label var spirits "Per capita consumption of distilled spirits, in gallons"
+  label var beer "Per capita consumption of malted liquor in gallons"
+  label var wine "Per capita consumption of wine in gallons"
+
+```  
+* **Save** data in Stata format (.dta):
+  save "OLS.dta", replace
 ```
 
 #### Objective 1:
@@ -83,7 +101,7 @@ Review Stata codes for descriptive statistics and linear regression
 #### Objective 2: Check OLS Assumptions
 
 * **Assumption 1:**   
-Linearity (the relationships between the predictors and the outcome variable should be linear):  
+* Linearity (the relationships between the predictors and the outcome variable should be linear):  
 * If there is only one predictor, we can use a scatterplot to detect if the relationship between X1 and Y is linear.  We can use the *lfit* command to show a linear fit.  Adding a lowess (locally weighted scatterplot smoothing) curve can help us detect for nonlinearity.
 
 ```
@@ -113,7 +131,7 @@ Linearity (the relationships between the predictors and the outcome variable sho
 ```
   linktest
 ```
-Equivalant to the *linktest*
+Equivalent to the *linktest*
 
 ```
   gen yhat2 = yhat^2
