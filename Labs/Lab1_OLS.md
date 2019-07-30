@@ -179,7 +179,7 @@ estat imtest
 * *pnorm* is sensitive to non-normality in the range of data; *qnorm* is sensitive to non-normality near the tails. Stata output indicates some minor level of non-normality, but the residuals are quite close to a normal distribution.
 
 Here are some examples of what normally distributed errors look like:  
-Kernal density plot:
+Kernal density plot:  
 ![Example of Normality of Errors 1](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar35.gif)  
 Standardized normal probability (P-P) plot:  
 ![Example of Normality of Errors 2](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar36.gif)  
