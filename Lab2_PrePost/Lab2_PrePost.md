@@ -19,9 +19,9 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 <img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
 
 #### Preliminary steps in Stata:  
-* Download/unzip the Lab2_PrePost folder from LATTE  
-* Open lab2.do  
-* Set working directory and open dta file  
+* **Download/unzip** the Lab2_PrePost folder from LATTE  
+* **Open** PrePost.do  
+* Set your working directory and open the Wages.dta dataset:
 
 ```
         cd "C:\Heller\409A\Lab2_PrePost"  
