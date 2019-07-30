@@ -49,6 +49,7 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 ```
 * However, there are alternatives that are preferred in the case of skewed data.  
 Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
+
 ```
 	qnorm lwage
 	sdtest lwage, by(year)
@@ -62,7 +63,8 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	regress lwage female educ exper expersq union
 	estimates store m1
 ```
-* for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change. 
+* for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change.
+
 ```
 	di exp(-.25)-1
 ```
@@ -74,15 +76,18 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	estimates store m2
 ```
 * Let's compare models in a table  
+
 ```
 	esttab m1 m2, b(%7.4f) se star stats(N r2 r2_a)
 ```
 * I hypothosize that the difference in wages between females and males may have changed between 1978 and 1985
+
 ```
 	table year female, c(mean lwage)
 ```
 * It appears that the difference may have declined between 1978 and 1985. To test this formally, we include an interaction term:
 * Let's create an interaction term
+
 ```
 	gen y85fem = y85*female
 	label var y85fem "Females in 1985"
