@@ -1,6 +1,6 @@
 # HS 409A Lab: OLS Review
 August XX, 2019  
-TA: Mark Zocchi
+TA: Mark Zocchi (mzocchi@brandeis.edu)
 
 #### Goal:
 To test assumptions for OLS using a dataset in Stata
