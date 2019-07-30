@@ -102,7 +102,7 @@ Review Stata codes for descriptive statistics and linear regression
 ```
 #### Objective 2: Check OLS Assumptions
 
-* **Assumption 1: Linearity**   
+**Assumption 1: Linearity**   
 * The relationships between the predictors and the outcome variable should be linear.  
   * If there is only one predictor, we can use a scatterplot to detect if the relationship between X1 and Y is linear.  We can use the *lfit* command to show a linear fit.  Adding a lowess (locally weighted scatterplot smoothing) curve can help us detect for nonlinearity.
 
