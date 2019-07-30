@@ -1,5 +1,8 @@
 # Lab 2. Pre Post
 
+Econometrics 409A  
+August XX, 2019
+
 ### Goal: To estimate OLS regression models in Stata for pre-post study designs
 
 ### Objectives: 
@@ -18,26 +21,29 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 #### Preliminary steps in Stata:  
 * Download/unzip the Lab2_PrePost folder from LATTE  
 * Open lab2.do  
-* Set working directory and open dta file
+* Set working directory and open dta file  
+
 ```
         cd "C:\Heller\409A\Lab2_PrePost"  
         use "Wage.dta", clear 
 ```
 #### Descriptive Statistics
 ```
-	summarize
-	codebook, compact
-	bysort year: sum wage
-	sdtest wage, by(year)
-	ttest wage, by(year) unequal
+	summarize  
+	codebook, compact  
+	bysort year: sum wage  
+	sdtest wage, by(year)  
+	ttest wage, by(year) unequal  
 ```
 #### Log Transformation
-* Do wages follow a normal distribution? 
+* Do wages follow a normal distribution?  
+
 ```
 	hist wage, norm
 	qnorm wage
 ```
-* If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).
+* If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).  
+
 ```
 	ttest wage, by(year) unequal
 ```
@@ -88,6 +94,7 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	estimates store m3
 ```
 * Now compare all three models:
+
 ```
 	esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 ```
@@ -95,6 +102,7 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 * Let's focus on Model 3
 * Predicted means (in log-wages) for each group
 * Use these values to find the D-i-D effect:
+
 ```
 * Men in '78 -- reference group:
 	margins, at(y85=0 female=0 y85fem=0)
@@ -118,23 +126,28 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	di 0.32 - 0.231
 ```
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
+
 ```
 	reg lwage y85##female educ exper expersq union 
 	margins y85#female
 ```
 * Margins plot is a nice way to visualize the results from the margins table.
+
 ```
 	marginsplot 
 ```
-* If you want to create an interaction term with a continious variable (e.g. experience), you will need to put a 'c.' in front (we will remove the quadratic term to simplify): 
+* If you want to create an interaction term with a continious variable (e.g. experience), you will need to put a 'c.' in front (we will remove the quadratic term to simplify):
+
 ```
 	regress lwage female c.exper##y85 educ union 
 ```
 * for margins, specify what levels of the continous variable you are interested in. Note: any covariates ommitted will be set at their means by default.
+
 ```
 	margins y85, at(exper=(1 4 10 20))
 ```
 * we may also want set another variable in the model at a specific value, e.g., union members
+
 ```
 	margins y85, at(exper=(1 4 10 20) union=1)
 	marginsplot
@@ -143,6 +156,7 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 
 #### Regression with centered variables
 * Sometimes, we center variables on a meaningful value for easier interpretation.  For instance, we may center a “years of education” variable at 12 years.  Doing so would allow us to interpret the variable’s beta coefficient as the effect of an additional year of college education, holding everything else constant.  Below is an example of generating a new education variable centered at the 12th year.
+
 ```
 	gen c_educ= (educ-12)
 	regress lwage y85 female y85fem c_educ exper expersq union
@@ -150,46 +164,52 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 * Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
 
 #### Extra
-* Why do we have an experience squared term in the model? 
+* Why do we have an experience squared term in the model?
+
 ```
 	twoway (scatter lwage exper) (qfit lwage exper) (lfit lwage exper)
 ```
 * From the quadratic fit line (red) it looks like people with many years of experience start to see reduced wages.
-
 * Find the turning point (i.e. when experience starts to have a negative effect on wage)
+
 ```
 	estimates restore m3
 	nlcom -_b[exper]/(2*_b[expersq])
 	*or 
 	display = -(.0294761)/(2*-.0003975)
 ```
-** Another method for D-i-D: Stratified approach **
+**Another method for D-i-D: Stratified approach:**
+
 * We could also stratify by gender and fit a pair of separate models:
 * one for the males and one for the females in the sample
-
 * Model for men (if female==0)
+
 ```
 	reg lwage y85 educ exper expersq union if female==0
 	est store mm
 ```
 * Model for women (if female==1)
+
 ```
 	reg lwage y85 educ exper expersq union if female==1
 	est store mf
 ```
 * Compare estimates from each model.
 * Which coefficients are different? What does it mean?
+
 ```
 	esttab mm mf, b(%7.4f) se star stats(N r2 r2_a)
 ```
 * Now we can generate predicted values from each model to complete our D-i-D analysis like we did in the pooled approach
 * Need to restore results from first stratified model (men) to get the predicted values.
+
 ```
 	est restore mm
 	margins, at(y85=0)
 	margins, at(y85=1)
 ```
 * And now restore results from the second model (women) and get the predicted values
+
 ```
 	est restore mf
 	margins, at(y85=0)
