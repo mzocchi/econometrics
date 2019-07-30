@@ -52,7 +52,7 @@ Annual mortality rates due to heart disease and other potentially related variab
 Review Stata codes for descriptive statistics and linear regression
 
 * Codes for univariate and bivariate statistics
-* *Describe*, *summarize*, and *codebook* are some Stata commands that will provide a general illustration of your dataset.  Information such as the averages, min, max, and standard deviations may be obtained from summarize and codebook. Describe will give you a general sense of the variable types and variable definitions as recorded in the dataset.
+  * *Describe*, *summarize*, and *codebook* are some Stata commands that will provide a general illustration of your dataset.  Information such as the averages, min, max, and standard deviations may be obtained from summarize and codebook. Describe will give you a general sense of the variable types and variable definitions as recorded in the dataset.
 
 ```
   describe  
@@ -66,7 +66,7 @@ Review Stata codes for descriptive statistics and linear regression
     graph matrix chd-wine, half
 ```
 * Codes for linear regression and saving estimates, residuals, & predicted values
-* The common command for OLS regression is *regress* ("reg"), which is followed by the dependent variable then independent variables. 
+  * The common command for OLS regression is *regress* ("reg"), which is followed by the dependent variable then independent variables. 
 
 ```
     reg chd cal-wine  
@@ -82,14 +82,14 @@ Review Stata codes for descriptive statistics and linear regression
     est restore m1
 ```
 * Obtain & label the residuals for the observations that are used in the regression model.
-* The residuals will be important for testing OLS assumptions later. We restrict this prediction to only include observations used in the current model, as indicated by the *e(sample)* option.
+  * The residuals will be important for testing OLS assumptions later. We restrict this prediction to only include observations used in the current model, as indicated by the *e(sample)* option.
 
 ```
   predict r if e(sample), resid
   label var r “residuals”
 ```
 * Obtain & label the standardized residuals for the observations that are used in the regression model.  
-* We obtain the standardized residuals by dividing them by the standard error.  Standardization sets the mean of the residuals at zero and standard deviation at 1.0.  Thus, if the distribution of the residuals is normal, then we can expect that 95% of the residuals fall between two standard deviations of the mean on both sides. Likewise, we expect that approximately 5% of the residuals will be beyond this region.
+  * We obtain the standardized residuals by dividing them by the standard error.  Standardization sets the mean of the residuals at zero and standard deviation at 1.0.  Thus, if the distribution of the residuals is normal, then we can expect that 95% of the residuals fall between two standard deviations of the mean on both sides. Likewise, we expect that approximately 5% of the residuals will be beyond this region.
 
 ```
   predict rstd if e(sample), rstandard
@@ -102,48 +102,55 @@ Review Stata codes for descriptive statistics and linear regression
 ```
 #### Objective 2: Check OLS Assumptions
 
-* **Assumption 1:**   
-* Linearity (the relationships between the predictors and the outcome variable should be linear):  
-* If there is only one predictor, we can use a scatterplot to detect if the relationship between X1 and Y is linear.  We can use the *lfit* command to show a linear fit.  Adding a lowess (locally weighted scatterplot smoothing) curve can help us detect for nonlinearity.
+* **Assumption 1: Linearity**   
+* The relationships between the predictors and the outcome variable should be linear.  
+  * If there is only one predictor, we can use a scatterplot to detect if the relationship between X1 and Y is linear.  We can use the *lfit* command to show a linear fit.  Adding a lowess (locally weighted scatterplot smoothing) curve can help us detect for nonlinearity.
 
 ```
-  twoway (scatter chd cal) (lfit chd cal) (lowess chd cal)  
+twoway (scatter chd cal) (lfit chd cal) (lowess chd cal)  
 ```
 * If we are interested in testing the linearity of a multivariate regression (more than one independent variables), we would plot the standardized residuals against each of the independent variables in the model. Ideally, we want to see a random scatter of points. If the scatter plot shows a nonlinear pattern, then there is a problem of nonlinearity. Some of the graphs from Stata output indicate nonlinearity, which may be due to influential points.  
+
 ```
-    scatter rstd cal  
-    scatter rstd unemp  
+scatter rstd cal  
+scatter rstd unemp  
 ```
 
 **Assumption 2: Random Sampling**  
-* This is not directly testable in Stata. This assumption is satisified (or not) based on the sampling design of our data.  
+* This is not directly testable in Stata. This assumption is satisfied (or not) based on the sampling design of our data.  
 
 **Assumption 3: No perfect collinearity (no multicollinearity)**
 * This assumption refers to perfectly correlated independent variables.  We simply test this assumption by examining the correlations between the independent variables in our data.  A similar issue is multicollinearity, which is when independent variables are highly correlated but not perfectly correlated.  We can examine the variance inflation factor (VIF) of each variable to determine if multicollinearity is an issue.  VIF values greater than 10.0 suggests multicollinearity.  Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
 
 ```
-  est restore m1
-  estat vif
+est restore m1
+estat vif
 ```
 
 **Assumption 4: Zero conditional mean**
-* The three main problems that cause the zero conditional mean assumption to fail in a regression model are: 1) improper specification of the model, such as omitted variables 2) endogeneity of one or more independent variables, and 3) measurement error of one or more independent variables.  Explanatory variables are “exogenous” if they do not correlate with the error term, which is a good thing.  If they do, they are considered endogenous.  
+* The three main problems that cause the zero conditional mean assumption to fail in a regression model are:  
+  1) improper specification of the model, such as omitted variables;  
+  2) endogeneity of one or more independent variables; and,    
+  3) measurement error of one or more independent variables.
+
+  Explanatory variables are “exogenous” if they do not correlate with the error term, which is a good thing.  If they do, they are considered endogenous.  
+
 * *Linktest* command detects model misspecification by regressing the dependent variable on the predicted values (yhat) and the predicted values squared (hatsq).  The idea is that if the model was specified correctly, then no other additional independent variables should be significant except by chance. Thus, we should expect the predicted value (yhat) to be significant because it was predicted from the model and the squared variable (hatsq) to be insignificant if the model is specified properly. If hatsq is significant, then the linktest concludes that there may be omitted variables.
 
 ```
-  linktest
+linktest
 ```
 Equivalent to the *linktest*
 
 ```
-  gen yhat2 = yhat^2
-  reg chd yhat yhat2
+gen yhat2 = yhat^2
+reg chd yhat yhat2
 ```
 
 * *Ovtest* is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables. Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
 
 ```
-  estat ovtest
+estat ovtest
 ```
 
 **Assumption 5: Homoskedasticity**
@@ -153,35 +160,39 @@ Equivalent to the *linktest*
 * We can detect heteroskedasticity by plotting the residuals against the predicted values.  If the model is well-fitted, there should be no obvious pattern in the graph, indicating that the variance of the residuals is constant.
 
 ```
-  rvfplot, yline(0)
+rvfplot, yline(0)
 ```
-Equivalent to *rvfplot*
+* Equivalent to *rvfplot*:
 
 ```
-  scatter yhat r, yline(0)
+scatter yhat r, yline(0)
 ```
 * Two other popular tests for heteroskedasticity are White’s test (*imtest*) and Breusch-Pagan test (*hettest*). Both test the null hypothesis that the variance of the residuals are homogenous.  Thus, if the tests are significant, there is evidence of heteroskedasticity.
 
 ```
-  estat hettest
-  estat imtest
+estat hettest
+estat imtest
 ```
 **Assumption 6: Normality of errors**
-* Kernal density plot is similar to a histogram, except that it has narrow bins and uses moving averages to create a smooth curve. The *pnorm* command graphs a standardized normal probability (P-P) plot while *qnorm* plots the quantiles of a variable against the quantiles of a normal distribution. *Pnorm* is sensitive to non-normality in the range of data; *qnorm* is sensitive to non-normality near the tails. Stata output indicates some minor level of non-normality, but the residuals are quite close to a normal distribution.
+* Kernal density plot is similar to a histogram, except that it has narrow bins and uses moving averages to create a smooth curve. 
+* The *pnorm* command graphs a standardized normal probability (P-P) plot while *qnorm* plots the quantiles of a variable against the quantiles of a normal distribution.
+* *pnorm* is sensitive to non-normality in the range of data; *qnorm* is sensitive to non-normality near the tails. Stata output indicates some minor level of non-normality, but the residuals are quite close to a normal distribution.
 
+Here are some examples of what normally distributed errors look like:  
+Kernal density plot:
+![Example of Normality of Errors 1](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar35.gif)  
+Standardized normal probability (P-P) plot:  
+![Example of Normality of Errors 2](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar36.gif)  
+
+* Now, we will test our data:
 ```
   kdensity r, normal
   hist rstd, norm
   pnorm r
   qnorm r
 ```
-Here are some examples of what normally distributed errors look like:
-**kernal density plot:**  
-![Example of Normality of Errors 1](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar35.gif)  
-**standardized normal probability (P-P) plot:**  
-![Example of Normality of Errors 2](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar36.gif)  
 
-Another test available is the Shapiro-Wilk W test for normality. The p-value is based on the assumption that the distribution of the residuals is normal. A large pvalue (>0.05) indicates that we cannot reject the assumption that r is normally distributed.
+* Another test available is the Shapiro-Wilk W test for normality. The p-value is based on the assumption that the distribution of the residuals is normal. A large pvalue (>0.05) indicates that we cannot reject the assumption that r is normally distributed.
 
 ```
   swilk r
