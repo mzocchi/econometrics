@@ -3,6 +3,7 @@
 Econometrics 409A  
 August XX, 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)
+abcdefghi
 
 ### Goal: To estimate OLS regression models in Stata for pre-post study designs
 
