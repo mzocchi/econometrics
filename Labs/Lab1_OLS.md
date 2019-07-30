@@ -40,10 +40,12 @@ Annual mortality rates due to heart disease and other potentially related variab
   label var spirits "Per capita consumption of distilled spirits, in gallons"
   label var beer "Per capita consumption of malted liquor in gallons"
   label var wine "Per capita consumption of wine in gallons"
-
 ```  
+
 * **Save** data in Stata format (.dta):
-  save "OLS.dta", replace
+
+```
+  save OLS.dta, replace
 ```
 
 #### Objective 1:
