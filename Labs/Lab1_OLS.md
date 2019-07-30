@@ -1,4 +1,4 @@
-# HS 409A Lab: OLS Review
+# HS 409A Lab 1: OLS Review
 August XX, 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)
 
