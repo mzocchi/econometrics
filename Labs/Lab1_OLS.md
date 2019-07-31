@@ -20,8 +20,8 @@ Annual mortality rates due to heart disease and other potentially related variab
 
 #### Preliminary steps in Stata:  
 * **Download/unzip** LAB1_OLS folder from LATTE  
-* **Open** Lab1.do  
-* **Set working directory** and import "raw" data
+* **Open** OLS.do  
+* **Set working directory** and import the "raw" data (coronary.csv)
 
 ```
   cd "C:\Heller\409A\Lab1_OLS"  
