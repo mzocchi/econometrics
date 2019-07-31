@@ -1,7 +1,5 @@
-# Lab 2. Pre Post
-
-Econometrics 409A  
-August XX, 2019  
+# HS 409A: Lab 2. Pre Post
+Fall 2019
 TA: Mark Zocchi (mzocchi@brandeis.edu)  
 
 ### Goal: To estimate OLS regression models in Stata for pre-post study designs
