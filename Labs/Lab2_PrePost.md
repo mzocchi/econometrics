@@ -64,11 +64,19 @@ Log-transformation of the skewed variable, check for normality and equal varianc
 	regress lwage female educ exper expersq union
 	estimates store m1
 ```
-* for larger coefficients, exponentiate the coefficient and subtract to interpret a percentage change.
+* Interpret the coefficient for education (edu).
+  * For every additional year of eduction, wages are expected to increase by approximately 9 percent (95% CI 7.7% to 9.9%).
 
+* for larger coefficients, eg female, exponentiate the coefficient and subtract to interpret a percentage change. 
+  
 ```
-	di exp(-.25)-1
+  di exp(-.251)-1
 ```
+  * On average, wages for females are 22.2% lower than males holding experience, education, and union status constant.
+
+* Interpret the constant (B0):
+  * The average wage for males (female = 0), with zero years of education (edu = 0), zero experience (exper = 0 , expersq=0), and who are not in a union (union = 0) was approximately $1,550 (exp(.443) = 1.55)
+
 * Now add in a covariate to control for survey year (y85)
 <img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />  
 
