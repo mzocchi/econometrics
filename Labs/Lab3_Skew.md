@@ -72,7 +72,9 @@ hist mhvisct, norm
 qnorm mhvisct
 ```
 
-#### One-part OLS model
+#### One-part OLS model:
+<img src="http://latex.codecogs.com/gif.download?%5Cinline%20MentalHlthVisit%20%3D%20%5Cbeta%20_0%20+%20X%5Cbeta%20+%20%5Cmu" />  
+
 ```
 regress mhvisct age-fmsize ivdrug-preg
 estimates store ols1
