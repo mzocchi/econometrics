@@ -49,7 +49,7 @@ drop if mhvisct == .
 *	Lets also drop all observations for which there was no data available
 (i.e. missing values for all 27 vars in dataset)
 ```
-drop if misscount == 27)
+drop if misscount == 27
 ```
 
 * Is dropping all observations a good idea?
@@ -79,21 +79,19 @@ qnorm mhvisct
 regress mhvisct age-fmsize ivdrug-preg
 estimates store ols1
 ```
-* Generate residuals and predicted values for outcome (MH visits)
+* Generate residuals and predicted values for outcome (MH visit count)
 
 ```
 predict r1 if e(sample), resid
-predict yhat1 if e(sample), xb
 label var r1 "Residuals from model OLS1"
-label var yhat1 "Predicted values from model OLS1"
 ```
 
 * Test MLR.6: Normality of errors  
   * Are errors non-normally distributed?
 ```
 summarize r1, detail
-histogram r1, normal saving(r1hist)
-qnorm r1
+histogram r1, normal saving(r1hist, replace)
+qnorm r1, saving(r1qnorm, replace)
 ```	
 
 * Test MLR.5: Constant variance (homoskedasticity)
@@ -143,25 +141,21 @@ regress log_mhvisct age-fmsize ivdrug-preg
 est store ols2
 ```
 
-* Generate residuals and predicted values
+* Generate residuals
 ```
 predict r2 if e(sample), resid
-predict yhat2 if e(sample), xb
 label var r2 "Residuals from model OLS2"
-label var yhat2 "Predicted values from model OLS2"
 ```
 
 * Test MLR.6: Normality of errors
   * Are errors non-normally distributed?
 ```
-estimates restore ols2
 summarize r2, detail
-qnorm r2, saving(r2qnorm)
+histogram r2, norm saving(r2hist, replace)
+qnorm r2, saving(r2qnorm, replace)
 ```
   * Compare to non-transformed model
 ```
-histogram r2, norm saving(r2hist)
-histogram r1, norm name(r1hist, replace)
 graph combine r1hist.gph r2hist.gph r1qnorm.gph r2qnorm.gph, rows(2)
 ```
 
@@ -169,7 +163,7 @@ graph combine r1hist.gph r2hist.gph r1qnorm.gph r2qnorm.gph, rows(2)
   * Inspect graphically
 ```
 rvfplot, yline(0) saving(r2rvf)
-graph combine r1rvf.gph r2rvf.gph, rows(2) holes(2 3)
+graph combine r1rvf.gph r2rvf.gph
 scatter r2 logmhvisct, yline(0)
 ```
   * Run heteroskedasticity tests
@@ -186,13 +180,11 @@ linktest
 
 #### Two-part model: Probit and OLS
 
-* Part 1: Probit model of the likelihood of have ANY MH visits (mhvisit)
+* **Part 1: Probit model of the likelihood of have ANY MH visits (mhvisit)**
 ```
 tab mhvisit
 probit mhvisit age-fmsize ivdrug-preg
 est store probit1
-predict pr_mhvis if e(sample), pr
-predict xb, xb
 ```
   * In a probit model, the coefficients are expressed in z-scores. So, for example, a one-unit change in year lowers the z-score by 0.008.
   * To translate the coefficients into predicted probabilities, we can use margins command
@@ -208,75 +200,77 @@ estat class
   * Sensitivity - correctly classifying true positives. 
   * Specificity - correctly classifying true negatives
 
-* Goodness of fit table. 10 groups is the standard default. 
+* Goodness of fit table. 10 groups of the predicted probabilities is the standard default. 
 ```
 estat gof, group(10) table
 ```
-* If p-value > 0.05, we 
+* Because the p-value is > 0.05, we accept the null hypothesis that the model works reasonably well across the 10 groups (i.e model works just as well for the observations with low probability of mental health visits as it does for observations with high probability of a mental health visit)
 
-* Part 2: OLS model to estimate how many visits there will be for
-* cases with at least 1 visit
+* **Part 2: OLS model to estimate how many visits there will be for cases with at least 1 visit**
 
-	regress mhvisct age-fmsize ivdrug-preg if mhvisit==1
-	est store ols3 
+```
+regress mhvisct age-fmsize ivdrug-preg if mhvisit==1
+est store ols3 
+```
 
-* Generate residuals and predicted values
-	predict r3 if e(sample), resid
-	predict yhat3 if e(sample), xb
-
-	label var r3 "Residuals from model OLS3"
-	label var yhat3 "Predicted values from model OLS3"
+* Generate residuals
+```
+predict r3 if e(sample), resid
+label var r3 "Residuals from model OLS3"
+```
 
 * Test MLR.6: Normality of errors
-  * Are errors non-normally distributed?
-
-	summarize r3, detail
-	histogram r3, norm
-	qnorm r3
-
-// compare histograms of the three OLS models 	
-	histogram r1, norm name (r1hist, replace)
-	histogram r2, norm name (r2hist, replace)
-	histogram r3, norm name (r3hist, replace)
-	graph combine r1hist r2hist r3hist
-
+```
+summarize r3, detail
+histogram r3, norm saving(r3hist, replace)
+qnorm r3
+```
+* Compare histograms of the three OLS models 	
+```
+	graph combine r1hist.gph r2hist.gph r3hist.gph
+```
 * Test MLR.5: Constant variance (homoskedasticity)
   * Inspect graphically
+	```
+  rvfplot, yline(0)  
+  ```
   * Run heteroskedasticity tests
+  ```
+	estat hettest
+	estat imtest 
+  ```
 
-	rvfplot, yline(0)
-
-	estat hettest //(null = homoscedasticty 
-	estat imtest //null = homoscedastcity 
-
-**looks like the tests disagree. Can use robust standard errors or try ln-transforming the DV for part 2
+  * It looks like the tests disagree. Can use robust standard errors or try log-transforming the DV for part 2.
 
 * Test MLR.4: Zero-conditional mean
   * Assumption could be violated if dependent var is skewed
   * Use a link test and look at estimate for "_hatsq" 
-
+```
 	linktest
-
-* Compare estimates.
-
+```
+* Compare estimates of all four models.
+```
 	esttab ols1 ols2 probit1 ols3, b(%7.2f) star stats(N r2 r2_a)
+```
+
 
 *******************************************
-//addtional way to run 2-part models 
+#### Extra: Alternative way to run 2-part models 
 *******************************************
 
-	/* ssc install twopm */ 
-
-	twopm mhvisct age-fmsize ivdrug-preg, firstpart(probit) secondpart(regress)
-
-//using the log of the outcome (if even after the 0s we think there might be normality concerns)
-	
-	twopm log_mhvisct age-fmsize ivdrug-preg, firstpart(probit) secondpart(regress)
-			*^keeping the DV as a log
-	
-// you could also just use the log DV in the second part:
-	
+```
+ssc install twopm
+twopm mhvisct age-fmsize ivdrug-preg, firstpart(probit) secondpart(regress)
+```
+* We also might want to estimate using the log of the outcome (if even after the 0s we think there might be normality concerns)
+```
+twopm log_mhvisct age-fmsize ivdrug-preg, firstpart(probit) secondpart(regress)
+```		
+* you could also just use the log DV in the second part:
+```	
 	twopm mhvisct age-fmsize ivdrug-preg, firstpart(logit) secondpart(regress, log)
-																		       *^specifying log in the secondpart
-	*or*
+```
+  *or*
+```
 	twopm mhvisct age-fmsize ivdrug-preg, firstpart(logit) secondpart (glm, link(log))
+```
