@@ -1,237 +1,79 @@
-# HS 409A Lab 3: Skewed Data
+# HS 409A Lab 3: Skewed Data: Log Transformations, GLM, and 2-part Models
 Fall 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)  
 
 #### Goal: 
-Practice working with regression models for dependent vars that have skewed/non-normal distributions.
+Practice working with regression models for dependent variables that have skewed/non-normal distributions.
 
 #### Objectives: 
-1. Estimate and interpret a regression model for a pre-post study
-2. Complete a difference-in-differences table by hand
-
-#### Research Questions: 
-1. Was there a wage difference between 1978 and 1985, controlling for other factors? Did this difference differ by gender?
+1. To develop models for estimating the number of mental health treatment visits individuals had during a given year. 
 
 #### Dataset: 
-Pooled cross sectional dataset of individuals’ hourly wages and related predictors of two time periods, 1978 and 1985. (N= 1,084 observations)
-
-####  Model:
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
+HMLS
 
 #### Preliminary steps in Stata:  
-* Download and unzip the "Lab2_PrePost" folder from LATTE  
-* Open the do file "PrePost.do" in Stata  
-* Set your working directory to the unzipped "Lab2_PrePost" folder
-* Open the Wages.dta dataset:
+* Download and unzip the "Lab3_Skew" folder from LATTE  
+* Open the do file "Skew.do" in Stata  
+* Set your working directory to the unzipped "Lab3_Skew" folder
+* Import the HMLS dataset from Excel and save in Stata.
 
 ```
-cd "C:\Heller\409A\Lab2_PrePost"  
-use "Wage.dta", clear 
+import excel "hmls_data.xlsx", sheet("Sheet1") firstrow case(lower) clear
+save "hmls_data.dta",replace
 ```
+**Descriptive Statistics** 
+
+```
+summarize
+```
+**Missing Data Table**
+
+```
+mdesc
+```
+#### Address missing data
+* Generate new variable (misscount) that will count how many missing values there are for each observation. 
+```
+egen misscount = rowmiss(fid-preg)
+```
+* View a table showing the results
+```
+tab misscount
+```
+* There are many ways of dealing with missing data. One option is to delete observations that have a lot of missing data or missing data on key variables of interest (e.g. the main dependent variable). 
+
+*	Our dependent variable is going to be number of mental health visits ("mhvisct"). Let's drop all observations for which data is missing on "mhvisct"
+```
+drop if mhvisct == .
+```
+*	Lets also drop all observations for which there was no data available
+(i.e. missing values for all 27 vars in dataset)
+```
+drop if misscount == 27)
+```
+
+* Is dropping all observations a good idea?
+* Alternatives for handling missing values?
+
 #### Descriptive Statistics
-```
-summarize  
-codebook, compact  
-bysort year: sum wage  
-sdtest wage, by(year)  
-ttest wage, by(year) unequal  
-```
-#### Log Transformation
-* Do wages follow a normal distribution?  
+* Examine dependent variable and assess it for skewness
+  * Look at mean vs. median in summary statistics
+  * Look at skewness (symmetry) and kurtosis (spread)
+  * Use a skewness/kurtosis test for normality (Ho: data is normally distributed)
 
+  ```
+  summarize mhvisct, detail
+  sktest mhvisct
+  ```
+* Generate a histogram overlaid with normal distribution
+* Generate a normal quantiles plot
 ```
-hist wage, norm
-qnorm wage
+hist mhvisct, norm
+qnorm mhvisct
 ```
-* If data were normally distributed, but variances were unequal (as determined by the sdtest), you could do a ttest for unequal variances (ttest with unequal option).  
 
+#### One-part OLS model
 ```
-ttest wage, by(year) unequal
-```
-* However, there are alternatives that are preferred in the case of skewed data.  
-Log-transformation of the skewed variable, check for normality and equal variance, conduct t-test:
-
-```
-qnorm lwage
-sdtest lwage, by(year)
-ttest lwage, by(year)
-```
-#### Pooled model design for pre-post analysis
-* Start with an overall model pooling both years together (i.e. do not put year in the model)
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2educ%20&plus;%20B_3exper%20&plus;%20B_4expersq%20&plus;%20B_5union%20&plus;%20u" />  
-
-```
-regress lwage female educ exper expersq union
-estimates store m1
-```
-* Interpret the coefficient for education (edu):
-> For every additional year of eduction, wages are expected to increase by approximately 9 percent (95% CI 7.7% to 9.9%).
-
-* for larger coefficients, eg female, exponentiate the coefficient and subtract to interpret a percentage change. 
-  
-```
-di exp(-.251)-1
-```    
-> On average, wages for females are 22.2% lower than males holding experience, education, and union status constant.
-
-* Interpret the constant (B0):
-> The average wage for males (female = 0), with zero years of education (edu = 0), zero experience (exper = 0 , expersq=0), and who are not in a union (union = 0) was approximately $1,550 (exp(.443) = 1.55)
-
-* Now add in a covariate to control for survey year (y85)
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />  
-
-```
-regress lwage y85 female educ exper expersq union
-estimates store m2
-```
-* Let's compare models in a table  
-
-```
-esttab m1 m2, b(%7.4f) se star stats(N r2 r2_a)
-```
-* How does the interpretation of the coefficients change with y85 added to the model?
-  
-* We might hypothesize that the wage gap between females and males changed between 1978 and 1985
-
-```
-table year female, c(mean lwage)
-```
-* It appears that the difference may have declined between 1978 and 1985. To test this formally, we include an interaction term:
-* Let's create an interaction term
-
-```
-gen y85fem = y85*female
-label var y85fem "Females in 1985"
-```
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85fem%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_6union%20&plus;%20u" />
-
-```
-regress lwage y85 female y85fem educ exper expersq union 
-estimates store m3
-```
-* Now compare all three models:
-
-```
-esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
-```
-* Interpret the interaction term, B3(y85fem)
-> Between 1978 and 1985, wages for females increased by 8.8% relative to males.  
-> Or you could say-  Wages for females increased 8.8% more than males between 1978 and 1985.
-
-#### Differences-in-differences table
-* Let's focus on Model 3
-* Predicted means (in log-wages) for each group
-* Use these values to find the D-i-D effect (B3 from Model 3):
-
-```
-* Men in '78 -- reference group:
-	margins, at(y85=0 female=0 y85fem=0)
-
-* Women in '78
-	margins, at(y85=0 female=1 y85fem=0)
-
-* Men in '85
-	margins, at(y85=1 female=0 y85fem=0)
-
-* Women in '85
-	margins, at(y85=1 female=1 y85fem=1)
-	
-* difference between men and women in 1978:
-	di 1.807-1.487
-	
-* difference between men and women in 1985:
-	di 2.160-1.929
-	
-* difference-in-difference:
-	di 0.32 - 0.231
-```
-* Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
-
-```
-reg lwage y85##female educ exper expersq union 
-margins y85#female
-```
-* Margins plot is a nice way to visualize the results from the margins table.
-
-```
-marginsplot 
-```
-* If you want to create an interaction term with a continious variable (e.g. experience), you will need to put a 'c.' in front (we will remove the quadratic term to simplify):
-
-```
-regress lwage female c.exper##y85 educ union 
-```
-* for margins, specify what levels of the continous variable you are interested in. Note: any covariates ommitted will be set at their means by default.
-
-```
-margins y85, at(exper=(1 4 10 20))
-```
-* we may also want set another variable in the model at a specific value, e.g., union members
-
-```
-margins y85, at(exper=(1 4 10 20) union=1)
-marginsplot
-```
-* From the plot, it looks like the effect of experience on wages is about the same in 1978 as it was in 1985. This is confirmed by the fact that our interaction term in the regression model is very small and not signficant.
-
-#### Regression with centered variables
-* Sometimes, we center variables on a meaningful value for easier interpretation.  For instance, we may center a “years of education” variable at 12 years.  Doing so would allow us to interpret the variable’s beta coefficient as the effect of an additional year of college education, holding everything else constant.  Below is an example of generating a new education variable centered at the 12th year.
-
-```
-gen c_educ= (educ-12)
-regress lwage y85 female y85fem c_educ exper expersq union
-```
-* Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
-
-#### Extra
-* Why do we have an experience squared term in the model?
-
-```
-twoway (scatter lwage exper) (qfit lwage exper) (lfit lwage exper)
-```
-* From the quadratic fit line (red) it looks like people with many years of experience start to see reduced wages.
-* Find the turning point (i.e. when experience starts to have a negative effect on wage)
-
-```
-estimates restore m3
-nlcom -_b[exper]/(2*_b[expersq])
-*or 
-display = -(.0294761)/(2*-.0003975)
-```
-**Another method for D-i-D: Stratified approach:**
-
-* We could also stratify by gender and fit a pair of separate models:
-* one for the males and one for the females in the sample
-* Model for men (if female==0)
-
-```
-reg lwage y85 educ exper expersq union if female==0
-est store mm
-```
-* Model for women (if female==1)
-
-```
-reg lwage y85 educ exper expersq union if female==1
-est store mf
-```
-* Compare estimates from each model.
-* Which coefficients are different? What does it mean?
-
-```
-esttab mm mf, b(%7.4f) se star stats(N r2 r2_a)
-```
-* Now we can generate predicted values from each model to complete our D-i-D analysis like we did in the pooled approach
-* Need to restore results from first stratified model (men) to get the predicted values.
-
-```
-est restore mm
-margins, at(y85=0)
-margins, at(y85=1)
-```
-* And now restore results from the second model (women) and get the predicted values
-
-```
-est restore mf
-margins, at(y85=0)
-margins, at(y85=1)
+regress mhvisct age-fmsize ivdrug-preg
+estimates store ols1
 ```
