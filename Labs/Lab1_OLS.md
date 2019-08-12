@@ -1,13 +1,14 @@
 # HS 409A Lab 1: OLS Review
-August XX, 2019  
+Fall 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)
 
 #### Goal:
 To test assumptions for OLS using a dataset in Stata
 
 #### Objectives: 
-1.	Review Stata codes for descriptive statistics and linear regression
-2.	Check OLS assumptions
+1. Review Stata codes for descriptive statistics and linear regression
+2. Review OLS assumptions
+3. Learn various post estimation commands to test OLS assumptions for a linear regression model.
 
 #### Research Question:
 What factors are associated with deaths due to coronary heart disease?
@@ -19,9 +20,10 @@ Annual mortality rates due to heart disease and other potentially related variab
 <img src="https://latex.codecogs.com/gif.latex?Chd&space;=&space;\beta_{0}&plus;\beta_{1}Cal&plus;\beta_{2}Unemp&plus;\beta_{3}Cig&plus;\beta_{4}Edfat&plus;\beta_{5}Meat&plus;\beta_{6}Spirits&plus;\beta_{7}Beer&plus;\beta_{8}Wine&plus;\mu" title="Chd = \beta_{0}+\beta_{1}Cal+\beta_{2}Unemp+\beta_{3}Cig+\beta_{4}Edfat+\beta_{5}Meat+\beta_{6}Spirits+\beta_{7}Beer+\beta_{8}Wine+\mu" />
 
 #### Preliminary steps in Stata:  
-* **Download/unzip** LAB1_OLS folder from LATTE  
-* **Open** OLS.do  
-* **Set working directory** and import the "raw" data (coronary.csv)
+* Download and unzip the "LAB1_OLS" folder from LATTE  
+* Open the do file "OLS.do" in Stata  
+* Set working directory to point to the unzipped LAB1_OLS folder
+* Import the "raw" data (coronary.csv) into Stata
 
 ```
   cd "C:\Heller\409A\Lab1_OLS"  
@@ -109,49 +111,58 @@ Review Stata codes for descriptive statistics and linear regression
 ```
 twoway (scatter chd cal) (lfit chd cal) (lowess chd cal)  
 ```
-* If we are interested in testing the linearity of a multivariate regression (more than one independent variables), we would plot the standardized residuals against each of the independent variables in the model. Ideally, we want to see a random scatter of points. If the scatter plot shows a nonlinear pattern, then there is a problem of nonlinearity. Some of the graphs from Stata output indicate nonlinearity, which may be due to influential points.  
+* If we are interested in testing the linearity of a multivariate regression (more than one independent variables), we would plot the standardized residuals against each of the independent variables in the model.
+* Ideally, we want to see a random scatter of points. If the scatter plot shows a nonlinear pattern, then there is a problem of nonlinearity. 
 
 ```
 scatter rstd cal  
 scatter rstd unemp  
 ```
+* Some of the graphs from Stata output indicate nonlinearity, which may be due to influential points. 
 
 **Assumption 2: Random Sampling**  
 * This is not directly testable in Stata. This assumption is satisfied (or not) based on the sampling design of our data.  
 
 **Assumption 3: No perfect collinearity (no multicollinearity)**
-* This assumption refers to perfectly correlated independent variables.  We simply test this assumption by examining the correlations between the independent variables in our data.  A similar issue is multicollinearity, which is when independent variables are highly correlated but not perfectly correlated.  We can examine the variance inflation factor (VIF) of each variable to determine if multicollinearity is an issue.  VIF values greater than 10.0 suggests multicollinearity.  Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
+* This assumption refers to perfectly correlated independent variables.  We simply test this assumption by examining the correlations between the independent variables in our data.
+* A similar issue is <u>multicollinearity</u>, which is when independent variables are highly correlated but not perfectly correlated.  We can examine the variance inflation factor (VIF) of each variable to determine if multicollinearity is an issue.
 
 ```
 est restore m1
 estat vif
 ```
+* VIF values greater than 10.0 suggests multicollinearity.  
+  * Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
+
+
 
 **Assumption 4: Zero conditional mean**
 * The three main problems that cause the zero conditional mean assumption to fail in a regression model are:  
-  1) improper specification of the model, such as omitted variables;  
-  2) endogeneity of one or more independent variables; and,    
-  3) measurement error of one or more independent variables.
+  1. improper specification of the model, such as omitted variables;  
+  2. endogeneity of one or more independent variables; and,    
+  3. measurement error of one or more independent variables.
 
-  Explanatory variables are “exogenous” if they do not correlate with the error term, which is a good thing.  If they do, they are considered endogenous.  
+* Explanatory variables are **exogenous** if they do not correlate with the error term, which is a good thing.  If they do, they are considered **endogenous**.  
 
-* *Linktest* command detects model misspecification by regressing the dependent variable on the predicted values (yhat) and the predicted values squared (hatsq).  The idea is that if the model was specified correctly, then no other additional independent variables should be significant except by chance. Thus, we should expect the predicted value (yhat) to be significant because it was predicted from the model and the squared variable (hatsq) to be insignificant if the model is specified properly. If hatsq is significant, then the linktest concludes that there may be omitted variables.
+* *Linktest* command detects model misspecification by regressing the dependent variable on the predicted values (yhat) and the predicted values squared (hatsq). 
+* The idea is that if the model was specified correctly, then no other additional independent variables should be significant except by chance. Thus, we should expect the predicted value (yhat) to be significant because it was predicted from the model and the squared variable (hatsq) to be insignificant if the model is specified properly. If hatsq is significant, then the linktest concludes that there may be omitted variables.
 
 ```
 linktest
 ```
-Equivalent to the *linktest*
+Equivalent to the *linktest*:
 
 ```
 gen yhat2 = yhat^2
 reg chd yhat yhat2
 ```
 
-* *Ovtest* is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables. Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
+* *Ovtest* is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables.
 
 ```
 estat ovtest
 ```
+* Stata output indicates that we should reject the null hypothesis (P=0.0137); there may be omitted variables in our model. 
 
 **Assumption 5: Homoskedasticity**
 * One of the main assumptions for OLS is the homogeneity of variance of the residuals. If the model is well-fitted, there should be no pattern to the residuals plotted against the fitted values. For example:  
