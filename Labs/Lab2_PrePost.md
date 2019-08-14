@@ -16,7 +16,7 @@ To estimate OLS regression models in Stata for pre-post study designs
 Pooled cross sectional dataset of individuals’ hourly wages and related predictors of two time periods, 1978 and 1985. (N= 1,084 observations)
 
 ####  Model:
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85*female%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29_i_t%20%3D%20B_0_i%20&plus;%20B_1y85_i%20&plus;%20B_2female_i%20&plus;%20B_3y85*female_i%20&plus;%20B_4educ_i%20&plus;%20B_5exper_i%20&plus;%20B_6expersq_i%20&plus;%20B_7union_i%20&plus;%20e_i" />
 
 #### Preliminary steps in Stata:  
 * Download and unzip the "Lab2_PrePost" folder from LATTE  
