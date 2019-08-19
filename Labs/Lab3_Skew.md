@@ -18,6 +18,7 @@ HMLS
 * Import the HMLS dataset from Excel and save in Stata.
 
 ```
+cd "..."
 import excel "hmls_data.xlsx", sheet("Sheet1") firstrow case(lower) clear
 save "hmls_data.dta",replace
 ```
