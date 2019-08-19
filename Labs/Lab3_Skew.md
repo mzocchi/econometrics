@@ -22,10 +22,11 @@ import excel "hmls_data.xlsx", sheet("Sheet1") firstrow case(lower) clear
 save "hmls_data.dta",replace
 ```
 **Descriptive Statistics** 
-
+* Summary Table
 ```
 summarize
 ```
+
 **Missing Data Table**
 
 ```
