@@ -120,3 +120,8 @@ tabstat pscore, by(catholic) stat(mean sd min max)
 pscore catholic inc8 inc8sq math8 mathfam, logit pscore(p) blockid(b) 
   comsup detail
 ```
+* We can graphically observe the distribution of p-scores by catholic school attendance.
+
+```
+histogram p, kdensity kdenopts(gaussian) by(catholic, cols(1) legend(off)) xlabel(0(.1).2) ytitle(Frequency) xtitle(Estimated Propensity Scores)
+```
