@@ -78,7 +78,7 @@ di exp(-.251)-1
 > The average wage for males (female = 0), with zero years of education (edu = 0), zero experience (exper = 0 , expersq=0), and who are not in a union (union = 0) was approximately $1,550 (exp(.443) = 1.55)
 
 * Now add in a covariate to control for survey year (y85)
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" />  
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3educ%20&plus;%20B_4exper%20&plus;%20B_5expersq%20&plus;%20B_6union%20&plus;%20u" /> 
 
 ```
 regress lwage y85 female educ exper expersq union
@@ -103,7 +103,7 @@ table year female, c(mean lwage)
 gen y85fem = y85*female
 label var y85fem "Females in 1985"
 ```
-<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85fem%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_6union%20&plus;%20u" />
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1y85%20&plus;%20B_2female%20&plus;%20B_3y85fem%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
 
 ```
 regress lwage y85 female y85fem educ exper expersq union 
@@ -148,7 +148,7 @@ esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
 
 ```
-reg lwage y85##female educ exper expersq union 
+reg lwage y85##female educ exper##exper union 
 margins y85#female
 ```
 * Margins plot is a nice way to visualize the results from the margins table.
@@ -184,6 +184,8 @@ regress lwage y85 female y85fem c_educ exper expersq union
 * Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
 
 #### Extra
+* Helpful video on interactions using Stata and interpreting coefficients: https://www.youtube.com/watch?v=9dNZJziERHw 
+
 * Why do we have an experience squared term in the model?
 
 ```
