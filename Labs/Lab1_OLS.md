@@ -78,7 +78,7 @@ Review Stata codes for descriptive statistics and linear regression
 ```
     est store m1
 ```
-* ***Hint:*** If you ever receive the error message, <span style="color:red">last estimates not found</span>, simply restore the estimates you wish to make active.
+* ***Note:*** If you ever receive the error message, <span style="color:red">last estimates not found</span>, restore the estimates you wish to make active.
 
 ```
     est restore m1
@@ -133,8 +133,6 @@ estat vif
 ```
 * VIF values greater than 10.0 suggests multicollinearity.  
   * Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
-
-
 
 **Assumption 4: Zero conditional mean**
 * The three main problems that cause the zero conditional mean assumption to fail in a regression model are:  
