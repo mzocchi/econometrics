@@ -7,8 +7,8 @@ To test assumptions for OLS using a dataset in Stata
 
 #### Objectives: 
 1. Review Stata codes for descriptive statistics and linear regression
-2. Review OLS assumptions
-3. Learn various post estimation commands to test OLS assumptions for a linear regression model.
+2. Review OLS assumptions and learn various post estimation commands to test OLS assumptions in a linear regression model.
+3. Learn how to test linear regression models for joint significance.
 
 #### Research Question:
 What factors are associated with deaths due to coronary heart disease?
@@ -205,4 +205,32 @@ Standardized normal probability (P-P) plot:
 
 ```
   swilk r
+```
+#### Objective 3
+Learn how to test linear regression models for joint significance.
+* Restore estimates from model 1
+```
+  estimates restore m1
+```
+* Are edible fats (edfat) and meats (meat) jointly significant?
+```
+  test edfat meat
+```
+* Estimate a new model that does not include edfat and meat
+```
+  reg chd cal cig unemp spirits beer wine
+  estimates store m2
+```
+* Let's compare model 1 to model 2:
+```
+  esttab m1 m2
+```
+* Note the change in the effect size of calories (cal) in model 2. This is an indication that calories is highly colinear with edible fats and meats (intuitively, this makes sense). We can test the joint significance of all three
+```
+  estimates restore m1
+  test cal edfat meat
+```
+* Jointly, these are significant and highly correlated:
+```
+  pwcorr cal edfat meat
 ```
