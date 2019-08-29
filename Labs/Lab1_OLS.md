@@ -7,8 +7,8 @@ To test assumptions for OLS using a dataset in Stata
 
 #### Objectives: 
 1. Review Stata codes for descriptive statistics and linear regression
-2. Review OLS assumptions
-3. Learn various post estimation commands to test OLS assumptions for a linear regression model.
+2. Review OLS assumptions and learn various post estimation commands to test OLS assumptions in a linear regression model.
+3. Learn how to test linear regression models for joint significance.
 
 #### Research Question:
 What factors are associated with deaths due to coronary heart disease?
@@ -78,7 +78,7 @@ Review Stata codes for descriptive statistics and linear regression
 ```
     est store m1
 ```
-* ***Hint:*** If you ever receive the error message, <span style="color:red">last estimates not found</span>, simply restore the estimates you wish to make active.
+* ***Note:*** If you ever receive the error message, <span style="color:red">last estimates not found</span>, restore the estimates you wish to make active.
 
 ```
     est restore m1
@@ -133,8 +133,6 @@ estat vif
 ```
 * VIF values greater than 10.0 suggests multicollinearity.  
   * Remember that different nonlinear functions of the same variables can appear in the model and would not violate this assumption (e.g. income and income^2; income^2 is not a perfect linear function of income).  
-
-
 
 **Assumption 4: Zero conditional mean**
 * The three main problems that cause the zero conditional mean assumption to fail in a regression model are:  
@@ -207,4 +205,32 @@ Standardized normal probability (P-P) plot:
 
 ```
   swilk r
+```
+#### Objective 3
+Learn how to test linear regression models for joint significance.
+* Restore estimates from model 1
+```
+  estimates restore m1
+```
+* Are edible fats (edfat) and meats (meat) jointly significant?
+```
+  test edfat meat
+```
+* Estimate a new model that does not include edfat and meat
+```
+  reg chd cal cig unemp spirits beer wine
+  estimates store m2
+```
+* Let's compare model 1 to model 2:
+```
+  esttab m1 m2
+```
+* Note the change in the effect size of calories (cal) in model 2. This is an indication that calories is highly colinear with edible fats and meats (intuitively, this makes sense). We can test the joint significance of all three
+```
+  estimates restore m1
+  test cal edfat meat
+```
+* Jointly, these are significant and highly correlated:
+```
+  pwcorr cal edfat meat
 ```
