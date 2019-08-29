@@ -26,7 +26,7 @@ Annual mortality rates due to heart disease and other potentially related variab
 * Import the "raw" data (coronary.csv) into Stata
 
 ```
-  cd "/Volumes/GoogleDrive/My Drive/Heller/TA Courses/Econometrics/Labs/Lab1_OLS"
+  cd "[file path to Lab 1 OLS folder]"
   import delimited coronary.csv, clear
 ```
 * **Label** the dataset and variables
