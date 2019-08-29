@@ -155,7 +155,7 @@ gen yhat2 = yhat^2
 reg chd yhat yhat2
 ```
 
-* *Ovtest* is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables.
+* *Ovtest* (Stata's version of the Ramsey RESET test) is used to test if there may be omitted squared, cubic, or other nonlinear explanatory variables. In summary, Stata regresses the explanatory variable on all predictors and standardized predicted values raised to the 2nd, 3rd, and 4th powers. It then conducts a F-test with the null hypothesis being that the model has no omitted variables.
 
 ```
 estat ovtest
