@@ -25,8 +25,8 @@ Pooled cross sectional dataset of individuals’ hourly wages and related predic
 * Open the Wages.dta dataset:
 
 ```
-cd "C:\Heller\409A\Lab2_PrePost"  
-use "Wage.dta", clear 
+cd "/Volumes/GoogleDrive/My Drive/Heller/TA Courses/Econometrics/Labs/Lab2_PrePost" 
+use "Wages.dta", clear 
 ```
 #### Descriptive Statistics
 ```
@@ -145,11 +145,13 @@ esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 * difference-in-difference:
 	di 0.32 - 0.231
 ```
+
+#### Margins and Margins Plots
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
 
 ```
-reg lwage y85##female educ exper##exper union 
-margins y85#female
+reg lwage i.y85##i.female educ c.exper##c.exper union 
+margins i.y85#i.female
 ```
 * Margins plot is a nice way to visualize the results from the margins table.
 
