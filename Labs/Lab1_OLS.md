@@ -222,10 +222,15 @@ Learn how to test linear regression models for joint significance.
   estimates store m2
 ```
 * Let's compare model 1 to model 2:
+  * You may first need to install estout if you haven't already:
+  ```
+  ssc install estout
+  ```
+* "esttab" is an quick and easy way to compare two (or more) models you have saved. The default settings will display t-statistics and stars if significant.
 ```
   esttab m1 m2
-```
-* Note the change in the effect size of calories (cal) in model 2. This is an indication that calories is highly colinear with edible fats and meats (intuitively, this makes sense). We can test the joint significance of all three
+ ```
+* Note the change in the effect size of calcium (cal) in model 2. This is an indication that calcium is highly colinear with edible fats and meats. We can also test the joint significance of all three
 ```
   estimates restore m1
   test cal edfat meat
