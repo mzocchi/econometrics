@@ -165,7 +165,7 @@ estat ovtest
 **Assumption 5: Homoskedasticity**
 * One of the main assumptions for OLS is the homogeneity of variance of the residuals. If the model is well-fitted, there should be no pattern to the residuals plotted against the fitted values. For example:  
 ![Example of homoskedasticity](https://stats.idre.ucla.edu/wp-content/uploads/2016/02/statar38.gif)
-
+(example data showing homogeneity)
 * We can detect heteroskedasticity by plotting the residuals against the predicted values.  If the model is well-fitted, there should be no obvious pattern in the graph, indicating that the variance of the residuals is constant.
 
 ```
