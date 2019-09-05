@@ -148,8 +148,8 @@ esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 
 <img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2y85%20&plus;%20B_3y85*fem%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
 
-<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_8451.JPG />  
-<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_2744.JPG />  
+<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_8451.JPG" />  
+<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_2744.JPG" />  
 
 #### Margins and Margins Plots
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
