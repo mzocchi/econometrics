@@ -177,7 +177,7 @@ marginsplot
 * From the plot, it looks like the effect of experience on wages is about the same in 1978 as it was in 1985. This is confirmed by the fact that our interaction term in the regression model is very small and not signficant.
 
 #### Regression with centered variables
-* Sometimes, we center variables on a meaningful value for easier interpretation.  For instance, we may center a “years of education” variable at 12 years.  Doing so would allow us to interpret the variable’s beta coefficient as the effect of an additional year of college education, holding everything else constant.  Below is an example of generating a new education variable centered at the 12th year.
+* Sometimes, we center variables on a meaningful value for easier interpretation of the constant.  For instance, we may center a “years of education” variable at 12 years. Below is an example of generating a new education variable centered at the 12th year. You could also center the variable "experience" at the average (e.g. 18 years). We will just center education for this example.
 
 ```
 gen c_educ= (educ-12)
