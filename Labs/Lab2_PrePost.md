@@ -137,14 +137,19 @@ esttab m1 m2 m3, b(%7.4f) se star stats(N r2 r2_a)
 	margins, at(y85=1 female=1 y85fem=1)
 	
 * difference between men and women in 1978:
-	di 1.807-1.487
+	di 1.487 - 1.807
 	
 * difference between men and women in 1985:
-	di 2.160-1.929
+	di 1.929 - 2.160
 	
-* difference-in-difference:
-	di 0.32 - 0.231
+* difference-in-difference 1985 v 1978: 
+	di -0.231 - -0.32
 ```
+
+<img src="http://latex.codecogs.com/gif.latex?Log%28wage%29%20%3D%20B_0%20&plus;%20B_1female%20&plus;%20B_2y85%20&plus;%20B_3y85*fem%20&plus;%20B_4educ%20&plus;%20B_5exper%20&plus;%20B_6expersq%20&plus;%20B_7union%20&plus;%20u" />
+
+<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_8541.JPG" />
+<img src = "https://github.com/mzocchi/econometrics/blob/master/IMG_2744.JPG" />
 
 #### Margins and Margins Plots
 * Another equivalent option to get the same values: use Stata's factor notation. Factor notation will help when using margins.
