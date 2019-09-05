@@ -7,7 +7,7 @@ To estimate OLS regression models in Stata for pre-post study designs
 
 #### Objectives: 
 1. Estimate and interpret a regression model for a pre-post study
-2. Complete a difference-in-differences table by hand
+2. Complete a difference-in-differences table using Stata and by hand
 
 #### Research Questions: 
 1. Was there a wage difference between 1978 and 1985, controlling for other factors? Did this difference differ by gender?
@@ -183,7 +183,7 @@ marginsplot
 gen c_educ= (educ-12)
 regress lwage y85 female y85fem c_educ exper expersq union
 ```
-* Now, we interpret the coefficeint on *female* as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the difference in log wages between females and males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
+* Now, the constant (B0) is more interpretable. We interpret the constant as when y85=0, y85fem = 0 , c_educ = 0, exper = 0, and expersq = 0. eg, the average log wages of males in 1978 (y85=0 and y85fem = 0) *for people with a high school education* (c_educ=0) without any experience (exper = 0 and expersq = 0).
 
 #### Extra
 * Helpful video on interactions using Stata and interpreting coefficients: https://www.youtube.com/watch?v=9dNZJziERHw 
