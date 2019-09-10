@@ -117,8 +117,7 @@ tabstat pscore, by(catholic) stat(mean sd min max)
 * Two popular commands for propensity score methods are pscore and psmatch2, which we will use for the remainder of this lab exercise. We use pscore because it conveniently computes the propensity scores and identifies the optimal number of blocks.  Adding the detail option will provide an extended output on the balance of the propensity scores for each block and their balance for each covariate within each block.  T-test is used to check for balance. Statistically insignificant results indicate that the treatment and comparison groups are balanced.  This is step 2 and 3 in Garrido et al., 2014.
 
 ```
-pscore catholic inc8 inc8sq math8 mathfam, logit pscore(p) blockid(b) 
-  comsup detail
+pscore catholic inc8 inc8sq math8 mathfam, logit pscore(p) blockid(b) comsup detail
 ```
 * We can graphically observe the distribution of p-scores by catholic school attendance.
 
