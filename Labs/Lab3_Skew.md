@@ -54,9 +54,6 @@ drop if mhvisct == .
 drop if misscount == 27
 ```
 
-* Is dropping all observations a good idea?
-* Alternatives for handling missing values?
-
 #### Descriptive Statistics
 * Examine dependent variable and assess it for skewness
   * Look at mean vs. median in summary statistics
