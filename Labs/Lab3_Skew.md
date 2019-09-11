@@ -79,8 +79,9 @@ regress mhvisct age-fmsize ivdrug-preg
 estimates store ols1
 ```
 * Generate residuals and predicted values for outcome (MH visit count)
-
+*  "if e(sample)" tells Stata to just use the observations that were included in the last run regression model.
 ```
+predict yhat1 if e(sample)
 predict r1 if e(sample), resid
 label var r1 "Residuals from model OLS1"
 ```
