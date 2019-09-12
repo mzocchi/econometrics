@@ -82,8 +82,8 @@ estimates store ols1
 *  "if e(sample)" tells Stata to just use the observations that were included in the last run regression model.
 ```
 predict yhat1 if e(sample)
-predict r1 if e(sample), resid
-label var r1 "Residuals from model OLS1"
+predict r1 if e(sample), rstandard
+label var r1 "Standardized esiduals from model OLS1"
 ```
 
 * Test MLR.6: Normality of errors  
@@ -123,7 +123,7 @@ estat imtest
   * We have lots of zeros; can't take log of zero
   * "Nudge" the data over a little bit to lose zeros
 ```
-	gen log_mhvisct = ln(.01+mhvisct)
+	gen log_mhvisct = ln(.1+mhvisct)
 	label var log_mhvisct "Log of MH visits"
 ```
 
@@ -143,8 +143,8 @@ est store ols2
 
 * Generate residuals
 ```
-predict r2 if e(sample), resid
-label var r2 "Residuals from model OLS2"
+predict r2 if e(sample), rstandard
+label var r2 "Standardized residuals from model OLS2"
 ```
 
 * Test MLR.6: Normality of errors
@@ -215,8 +215,8 @@ est store ols3
 
 * Generate residuals
 ```
-predict r3 if e(sample), resid
-label var r3 "Residuals from model OLS3"
+predict r3 if e(sample), rstandard
+label var r3 "Standardized residuals from model OLS3"
 ```
 
 * Test MLR.6: Normality of errors
@@ -255,7 +255,7 @@ qnorm r3
 
 
 *******************************************
-#### Extra: Alternative way to run 2-part models 
+#### Alternative way to run 2-part models 
 *******************************************
 
 ```
