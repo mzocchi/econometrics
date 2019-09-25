@@ -3,7 +3,7 @@ Fall 2019
 TA: Mark Zocchi (mzocchi@brandeis.edu)  
 
 #### Goal:
-Use propensity scores to make the treatment and comparison groups comparable
+Use propensity scores to make the treatment and comparison groups more comparable.
 
 #### Objectives: 
 1.	Select variables for the propensity score model
