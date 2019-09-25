@@ -35,7 +35,7 @@ capture ssc install pscore
 capture ssc install psmatch2
 ```
 #### Objective 1: Select variables for the propensity score model
-**A. Family income, Catholic school attendance, and 12th grade math achievement**  
+**Family income, Catholic school attendance, and 12th grade math achievement**  
 * The main idea behind propensity scores is creating a comparable treatment and control group so that we can test the effects of treatment on the outcomes.
 * In many cases, we have too many observations in the comparison group that that are not comparable to those in the treatment group, making it difficult to evaluate the effectiveness of treatment. *Thus, the first step is to assess if there are differences between the comparison and the treatment groups.*
 * Relating this to the research question, we want to know if there are differences between students who attended Catholic school versus those that did not. 
@@ -78,10 +78,10 @@ by catfaminc8, sort: ttest math12, by(catholic)
 ```
 * We can see that across the three income categories, math achievement in 12th grade was significantly higher for students who attended catholic schools versus those who did not.  
 
-**B. 8th grade math aptitude, Catholic school attendance, and 12th grade math achievement**
-* A student with high math aptitude in 8th grade may choose to attend Catholic schools, assuming that Catholic schools may provide more rigorous math courses.
-* High math aptitude in 8th grade may also correlate with the outcome variable, math12. 
-* We use student math scores in 8th grade as an indicator of math aptitude (math8).
+**8th grade math aptitude, Catholic school attendance, and 12th grade math achievement**  
+* A student with high math aptitude in 8th grade may choose to attend Catholic schools, assuming that Catholic schools may provide more rigorous math courses.  
+* High math aptitude in 8th grade may also correlate with the outcome variable, math12.  
+* We use student math scores in 8th grade as an indicator of math aptitude (math8).  
 
 ```
 ttest math8, by(catholic)
