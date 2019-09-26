@@ -34,15 +34,16 @@ use education.dta, clear
 capture ssc install pscore  
 capture ssc install psmatch2
 ```
-#### Objective 1: Select variables for the propensity score model
+#### Objective 1: Explore variables for the propensity score model
 **Family income, Catholic school attendance, and 12th grade math achievement**  
 * The main idea behind propensity scores is creating a comparable treatment and control group so that we can test the effects of treatment on the outcomes.
 * In many cases, we have too many observations in the comparison group that that are not comparable to those in the treatment group, making it difficult to evaluate the effectiveness of treatment. *Thus, the first step is to assess if there are differences between the comparison and the treatment groups.*
 * Relating this to the research question, we want to know if there are differences between students who attended Catholic school versus those that did not. 
 * *If there are differences*, we want to select individuals who did not attend Catholic school that are similar to those who did, and compare their math achievement.
 
+**Descriptive statistics, t-test**
 ```
-tabstat math12, by(catholic) stat(N mean sd)
+tabstat math12, by(catholic) stat(N mean sd min max)
 ttest math12, by(catholic)
 ```
 * Students who attended catholic schools had  12th grade math scores about 4 points higher than students who did not attend catholic schools.
@@ -57,7 +58,6 @@ tab faminc8 catholic, row chi2
 egen catfaminc8=cut(faminc8), at(1,9,11,13) icodes
 label define inccat2 0 "Low income: <$20K" 1 "Middle income: $20K-$35K" 2 "High Income >$35K"
 label values catfaminc8 inccat2
-tab catfaminc8
 ```
 * Always a good idea to confirm that you coded your new variable correctly:
 ```
@@ -66,7 +66,7 @@ tab faminc8 catfaminc8
 * We now check for differences in match scores using the new recoded income categories
 
 ```
-table catfaminc8 catholic, contents(mean math12)
+table catfaminc8 catholic, contents(mean math12) 
 ```
 * We can see that across the three income categories, mean math scores in 12th grade was higher for those that attend catholic school.
 * We now check to see if this difference is statistically significant in each of the income categories:
@@ -134,13 +134,13 @@ histogram p, kdensity kdenopts(gaussian) by(catholic, cols(1) legend(off)) xlabe
 
 ```
 set seed 9262019
-psmatch2 catholic inc8 inc8sq math8 mathfam, n(1) outcome(math12) common logit ate 
+psmatch2 catholic faminc8r faminc8rsq math8 mathfam, n(1) outcome(math12) common logit ate 
 ```
 
 * Check for balance of covariates after matching the sample by a propensity score using pstest. The following command must be done right after psmatch2 (Step 5 in Garrido et al., 2014).  Ideally, %bias (standardized difference) should be low.
 
 ```
-pstest  math8 inc8 inc8sq mathfam, treated(catholic) graph
+pstest  math8 faminc8r faminc8rsq mathfam, treated(catholic) graph
 ```
 
 **Estimate ATT using 1-1 nearest neighborhood matching without replacement and without caliper restriction**  
@@ -148,8 +148,8 @@ pstest  math8 inc8 inc8sq mathfam, treated(catholic) graph
 
 ```
 set seed 9262019
-psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) noreplacement common logit ate 
-pstest  math8 inc8 inc8sq mathfam, treated(catholic) both graph
+psmatch2 catholic faminc8r faminc8rsq math8 mathfam, outcome(math12) noreplacement common logit ate 
+pstest  math8 faminc8r faminc8rsq mathfam, treated(catholic) both graph
 ```
 
 **Estimate ATT with caliper restriction and with replacement**  
@@ -157,56 +157,36 @@ pstest  math8 inc8 inc8sq mathfam, treated(catholic) both graph
 
 ```
 set seed 9262019
-psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) common logit ate caliper(.2)
-pstest  math8 inc8 inc8sq mathfam, treated(catholic) graph
+psmatch2 catholic faminc8r faminc8rsq math8 mathfam, outcome(math12) common logit ate caliper(.2)
+pstest  math8 faminc8r faminc8sq mathfam, treated(catholic) graph
 ```
 
 **Estimate ATT using kernel weighting**   
 * “In kernel matching, each treated individual is given a weight of one. A weighted composite of comparison observations is used to create a match for each treated individual, where comparison individuals are weighted by their distance in propensity score from treated individuals within a range or bandwidth of the propensity score” (Garrido et al., 2014, p. 10) Better matches (higher p scores) are given more weights. This reduces bias while adding precision by using the entire sample, excluding only observations outside of the common support.
 
 ```
-set seed 3253
-psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) kernel common logit ate
-pstest  math8 inc8 inc8sq mathfam, treated(catholic) both graph
+set seed 9262019
+psmatch2 catholic faminc8r faminc8rsq math8 mathfam, outcome(math12) kernel common logit ate
+pstest  math8 faminc8r faminc8rsq mathfam, treated(catholic) both graph
 ```
 
 **Interpretation of the treatment effect (Step 6 in Garrido et al., 2014)**  
 * Garrido et al. 2014 seems to suggest using psmatch2 in order to use pstest to determine the best matching or weighting technique to estimate the treatment effect. Once determined, they recommend using a built-in Stata command (teffects psmatch) to calculate ATT because the command calculates standard errors based on the fact that propensity scores are estimated. Based on all the matching weighting techniques, it appears that either the 1:1 matching with replacement or matching with caliper set at 0.2 are better options.  Using 1:1 matching with replacement and no caliper, we execute the teffects psmatch command.
 
 ```
-teffects psmatch (math12) (catholic inc8 inc8sq math8 mathfam), atet nn(1)
+teffects psmatch (math12) (catholic faminc8r faminc8rsq math8 mathfam), atet nn(1)
 ```
 
 * Based on our 1:1 matching with replacement strategy, individuals who attended Catholic schools scored 1.826 points higher on 12th grade math achievement compared to those who did not attend.  
 
 #### Extra
-**Regression on the matched sample**  
-* I have found that the psmatch2 command is the most feasible, straightforward approach to generate a matched sample to use in a regression model. After running psmatch2, use the generated weight variable in your regression model to indicate that you only want to run the model on your matched sample.  
-
-Below is an example of how to include covariates in a regression after running a propensity score model with 1:1 nearest matching with replacement:
-
-```
-psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) n(1) common logit ate
-reg math12 catholic inc8 inc8sq math8 mathfam [fweight=_weight] 
-```
-
-**teffects psmatch is a built-in Stata command for propensity score approaches.**  
-* The benefit of using teffects psmatch is that it calculates standard errors based on the fact that propensity scores are estimated.  
-* The default treatment model is estimated using logit.  Include the probit option to the equation if that is what you want.  
-* The default setting will give you the average treatment effect (ATE), not the average treatment effect on the treated.  In order to get what you would get from ps2match (ATT), specify the option, atet.  
-* By default, teffects psmatch matches observations with replacement.  I’m not sure if there is a without replacement option.    
-* Similar to psmatch2, teffects psmatch matches each treatment group observation with one “nearest neighbor” in the comparison group.  
-* Below is the command for a 1:1 matching with replacement and asking for the average treatment effect on the treated (logit by default). Add option caliper if preferred.  
-
-```
-teffects psmatch (math12) (catholic inc8 inc8sq math8 mathfam), atet nn(1) caliper (.2)
-```
 
 **Two additional matching strategies from pscore (must predict propensity scores using pscore before running atts or attnd)**  
 * Estimate ATT using stratification matching (post-estimation command of pscore)  
 * The stratification matching method takes the difference between the average outcomes of the treatment group and the comparison group of each block.  ATT is calculated as “an average of the ATT of each block with weights given by the distribution of treatment units across blocks.”   
 
 ```
+psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) n(1) common logit ate
 atts math12 catholic, pscore(p) comsup blockid(b) bootstrap
 ```
 * Estimate ATT using nearest-neighbor matching with random draws (post-estimation command of pscore)  
@@ -214,10 +194,4 @@ atts math12 catholic, pscore(p) comsup blockid(b) bootstrap
 
 ```
 attnd math12 catholic, pscore(p) comsup detail matchvar(neighbor) matchdta(pickdat)
-```
-**Another approach to step 3 in Garrido et al., 2014.**  
-* We can check for the balance of the covariates of the treatment and comparison groups within each block.  If there is some indication of imbalance, we may need to transform the variable (e.g. log transform or square a variable).  
-
-```
-table b catholic if comsup==1, c(freq mean p mean inc8 mean math8 mean math12)
 ```
