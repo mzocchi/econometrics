@@ -33,7 +33,7 @@ cd "..."
 use education.dta, clear 
 capture ssc install psmatch2
 findit pscore
-* download st0026_2 for latest version. 
+  // (download st0026_2 for latest version if not already installed) 
 ```
 #### Objective 1: Explore variables for the propensity score model
 **Family income, Catholic school attendance, and 12th grade math achievement**  
@@ -159,7 +159,7 @@ pstest  math8 faminc8r faminc8rsq mathfam, treated(catholic) both graph
 ```
 set seed 9262019
 psmatch2 catholic faminc8r faminc8rsq math8 mathfam, outcome(math12) common logit ate caliper(.2)
-pstest  math8 faminc8r faminc8sq mathfam, treated(catholic) graph
+pstest  math8 faminc8r faminc8rsq mathfam, treated(catholic) graph
 ```
 
 **Estimate ATT using kernel weighting**   
@@ -187,7 +187,7 @@ teffects psmatch (math12) (catholic faminc8r faminc8rsq math8 mathfam), atet nn(
 * The stratification matching method takes the difference between the average outcomes of the treatment group and the comparison group of each block.  ATT is calculated as “an average of the ATT of each block with weights given by the distribution of treatment units across blocks.”   
 
 ```
-psmatch2 catholic inc8 inc8sq math8 mathfam, outcome(math12) n(1) common logit ate
+psmatch2 catholic faminc8r faminc8rsq math8 mathfam, outcome(math12) n(1) common logit ate
 atts math12 catholic, pscore(p) comsup blockid(b) bootstrap
 ```
 * Estimate ATT using nearest-neighbor matching with random draws (post-estimation command of pscore)  
