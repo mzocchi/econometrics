@@ -31,8 +31,9 @@ Cross sectional dataset of 5,671 students on their academic achievement, family 
 ```
 cd "..."
 use education.dta, clear 
-capture ssc install pscore  
 capture ssc install psmatch2
+findit pscore
+* download st0026_2 for latest version. 
 ```
 #### Objective 1: Explore variables for the propensity score model
 **Family income, Catholic school attendance, and 12th grade math achievement**  
