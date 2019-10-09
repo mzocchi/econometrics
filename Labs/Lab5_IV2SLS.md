@@ -112,6 +112,8 @@ However, unlike when we had a random assignment as an IV, here it is less clear 
 ivregress 2sls lwage educ exper expersq (educ=motheduc fatheduc), first
 estat endogenous
 ```
+With two instruments we can also test the over-identification restriction (see Wooldrige:
+
 
 
 
