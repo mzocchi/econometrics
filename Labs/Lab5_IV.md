@@ -55,7 +55,7 @@ corr x_arrest z_arrest
 
 * There is no way to test if the exclusion restriction is met. Statisfying this assumption comes from our reasoning that randomization cannot cause post treatment episodes of domestic violence *other than* through assignment of the treatment.
 
-#### What about models with multiple covariates
+#### What about models with multiple covariates?
 * So far, our models have not included any covariates. Suppose the setup is the same as before, with the modification that we’d now
 like to control for a vector of covariates. If randomization had not been broken we could just do:
 ```
@@ -72,7 +72,30 @@ estimates store IV2
 
 esttab OLS1 OSL2 IV1 IV2, keep(x_arrest weapon chem) mtitle(OLS OLS IV/2SLS IV/2SLS)
 ```
-* In the table we see that arrest has a larger effect when using the instrumental variable approach. The standard errors are a bit larger than in the OLS model, which is expected.
+* In the table we see that arrest has a larger effect when using the instrumental variable approach. The standard errors are larger than in the OLS model, which is expected. 
+
+#### Post estimation tests
+* (from Woolridge 15-5) "The 2SLS estimator is less efficient than OLS when the explanatory variables are exogenous; as we
+have seen, the 2SLS estimates can have very large standard errors. Therefore, it is useful to have a test for endogeneity of an explanatory variable that shows whether 2SLS is even necessary. Obtaining such a test is rather simple."
+
+```
+estimates restore IV2
+estat endogenous
+```
+* The Wu-Hausman test Ho hypothesis is that the instruments are exogenous. If we fail to reject the null, we can conclude that the 2SLS estimator is not necessary. Here, we see a significant result so we should not use the OLS estimate.
+
+#### Another example using multiple continious instrumental variables
+
+* We don't always have the benefit of a randomized assignment to use as an instrument. This is an example from Woolridge 15.8, which uses mother's and father's education as an instrument for education.
+```
+bcuse mroz
+```
+(see: http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.des) for variable labels.
+
+
+
+
+
 
 
 
