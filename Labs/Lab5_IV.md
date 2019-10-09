@@ -92,6 +92,27 @@ bcuse mroz
 ```
 (see: http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.des) for variable labels.
 
+We will first run a normal OLS for comparison to the 2SLS model:
+```
+reg lwage educ exper expersq
+estimates save OLS
+```
+We suspect that education is endogenous so and think that an IV approach could work using mother and father education as instruments. Before we do that we should make sure that mother's and father's education is indeed correlated with education after controlling for experience (identifying assumption). Because we are using two instruments, we use an F-test for joint signficance.
+```
+reg educ motheduc fatheduc exper expersq
+test meduc feduc
+```
+For the exclusion restriction, is it resonable to assume that mother's and father's education have no effect on the wages of the individual, other than through the individual's own education? This can be roughly tested by including these in an OLS regression:
+```
+reg lwage motheduc fatheduc educ exper expersq
+```
+However, unlike when we had a random assignment as an IV, here it is less clear that your mother's and father's education would have NO effect on you wages other than by increasing your own education (e.g. social networks, parental job connections, etc.). However, we are resonably satisfied with our results so we try a 2SLS model. 
+
+```
+ivregress 2sls lwage educ exper expersq (educ=motheduc fatheduc), first
+estat endogenous
+```
+
 
 
 
