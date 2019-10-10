@@ -1,13 +1,16 @@
-methodscandidate# HS 409A Lab 5: Instrumental Variables
+# HS 409A Lab 5: Instrumental Variables  
 Fall 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)  
 
 #### Goal:
+1. Use instrumental variables to estimate a regression model
 
 #### Objectives: 
+1.	Select instrumental variables
+2.	Estimate a model using instrumental variables
 
 #### Background: Minnesota Domestic Violence Experiment
-* The Minnesota Domestic Violence Experiment (MDVE) was motivated by debate over the importance of deterrence effects in the police response to domestic violence. For more info see: http://masteringmetrics.com/wp-content/uploads/2015/02/Angrist_2006.pdf
+* The Minnesota Domestic Violence Experiment (MDVE) was motivated by debate over the importance of deterrence effects in the police response to domestic violence. For more info see: http://masteringmetrics.com/wp-content/uploads/2015/02/Angrist_2006.pdf . 
 
 * Officers participating in the experiment randomized suspects of domestic violence into one of three groups: arrest, separation, or advice. However, the researchers found that many suspects randomized to Advice or Separation ("coddled") were arrested anyways. Researchers hypothesized that the treatment delivered was therefore non-random; i.e. those that were randomized to one of the coddled options but were arrested anyways were different than those that were randomized and actually received a coddled option (most cases that broke randomization occurred when a suspected attempted assault on an officer, the victim demanded arrest, or when both the victim and suspect were injured).
 
@@ -64,18 +67,17 @@ estimates store OLS2
 and call it a day. However, we suspect that treatment was not delivered in a random way so we use the IV approach. 
 
 * In IV lingo, this is the "reduced form" effect. If you can't see any causal effect in the reduced form, it is probably not going to be there with any IV approach. Here, we still see a significant effect of being randomized to arrest after controlling for the suspect's race, whether or not they had a weapon, and/or were under the influence of drugs/alcohol. 
-
 ```
 ivregress 2sls y_postdv weapon chem i.race i.year (x_arrest = z_arrest), first
-estimates store IV2
-
+estimates store IV2  
+```
+```  
 esttab OLS1 OSL2 IV1 IV2, keep(x_arrest weapon chem) mtitle(OLS OLS IV IV/2SLS)
 ```
 * In the table we see that arrest has a larger effect when using the instrumental variable approach. The standard errors are larger than in the OLS model, which is expected. 
 
 #### Post estimation tests
 * (from Woolridge 15-5) "The 2SLS estimator is less efficient than OLS when the explanatory variables are exogenous; as we have seen, the 2SLS estimates can have very large standard errors. Therefore, it is useful to have a test for endogeneity of an explanatory variable that shows whether 2SLS is even necessary. Obtaining such a test is rather simple."
-
 ```
 estimates restore IV2
 estat endogenous
@@ -112,14 +114,13 @@ test meduc feduc
 reg lwage motheduc fatheduc educ exper expersq
 ```
 However, unlike when we had a random assignment as an IV,  it is less clear that your mother's and father's education would have NO effect on you wages other than by increasing your own education (e.g. social networks, parental job connections, etc.). However, we are reasonably satisfied with our results so we try a 2SLS model. 
-
 ```
 ivregress 2sls lwage exper expersq (educ=motheduc fatheduc), first
 estat endogenous
 ```
 * The Wu-Hausman test is not significant (p>0.05), so our estimates are no different than normal OLS. 
 
-*If we look at the first stage results more closely, we can see that the instrument is not particularly strong, meaning that there is not strong correlation between education and parent's education after controlling for experience (partial r2 = 0.2).
+* If we look at the first stage results more closely, we can see that the instrument is not particularly strong, meaning that there is not strong correlation between education and parent's education after controlling for experience (partial r2 = 0.2).
 ```
 estat firststage
 ```
