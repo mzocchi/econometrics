@@ -21,7 +21,7 @@ TA: Mark Zocchi (mzocchi@brandeis.edu)
 * Note: for the sake of simplicity, we are only considering arrest vs non-arrest for this exercise.
 ```
 cd " " 
-use mvde.dta
+use mdve.dta
 codebook, compact
 ```
 * First, we can use a 2x2 table to examine assigned vs delivered treatments in the MDVE. 
