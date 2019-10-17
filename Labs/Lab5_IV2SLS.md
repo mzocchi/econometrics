@@ -35,7 +35,7 @@ tab z_arrest x_arrest, row
 reg y_postdv x_arrest
 estimates store OLS1
 ```
-* From this output we see being arrested resulted in a recidivism rate 7.4 percentages points lower than those not arrested.
+* From this output we see being arrested resulted in a recidivism rate 6.6 percentages points lower than those not arrested, but this finding is not statistically significant (p=.134).
 
 * However, this finding does not take the "non-compliance" into account. We are worried that because officers were more likely to break randomization and arrest the more violent suspects, we may be underestimating the effect of arrest using this simple OLS.
 
