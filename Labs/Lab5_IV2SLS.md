@@ -21,7 +21,7 @@ TA: Mark Zocchi (mzocchi@brandeis.edu)
 * Note: for the sake of simplicity, we are only considering arrest vs non-arrest for this exercise.
 ```
 cd " " 
-use mvde.dta
+use mdve.dta
 codebook, compact
 ```
 * First, we can use a 2x2 table to examine assigned vs delivered treatments in the MDVE. 
@@ -35,7 +35,7 @@ tab z_arrest x_arrest, row
 reg y_postdv x_arrest
 estimates store OLS1
 ```
-* From this output we see being arrested resulted in a recidivism rate 7.4 percentages points lower than those not arrested.
+* From this output we see being arrested resulted in a recidivism rate 6.6 percentages points lower than those not arrested, but this finding is not statistically significant (p=.134).
 
 * However, this finding does not take the "non-compliance" into account. We are worried that because officers were more likely to break randomization and arrest the more violent suspects, we may be underestimating the effect of arrest using this simple OLS.
 
@@ -66,11 +66,11 @@ estimates store OLS2
 ```
 and call it a day. However, we suspect that treatment was not delivered in a random way so we use the IV approach. 
 
-* In IV lingo, this is the "reduced form" effect. If you can't see any causal effect in the reduced form, it is probably not going to be there with any IV approach. Here, we still see a significant effect of being randomized to arrest after controlling for the suspect's race, whether or not they had a weapon, and/or were under the influence of drugs/alcohol. 
 ```
 ivregress 2sls y_postdv weapon chem i.race i.year (x_arrest = z_arrest), first
 estimates store IV2  
 ```
+Here, we still see a significant effect of being randomized to arrest after controlling for the suspect's race, whether or not they had a weapon, and/or were under the influence of drugs/alcohol. 
 ```  
 esttab OLS1 OSL2 IV1 IV2, keep(x_arrest weapon chem) mtitle(OLS OLS IV IV/2SLS)
 ```
@@ -97,7 +97,6 @@ bcuse mroz
 We will first run a normal OLS for comparison to the 2SLS model:
 ```
 reg lwage educ exper expersq
-estimates store OLS
 ```
 * Every additional year of education increases log-wages by 0.11 (approximately 11% in real wages, p<0.001). 
 
@@ -109,11 +108,8 @@ test meduc feduc
 * Both mother's and father's years of education is jointly significant
 
 * For the exclusion restriction, is it reasonable to assume that mother's and father's education have no effect on the wages of the individual, other than through the individual's own education? 
-* This can be *roughly* tested by including these in an OLS regression:
-```
-reg lwage motheduc fatheduc educ exper expersq
-```
-However, unlike when we had a random assignment as an IV,  it is less clear that your mother's and father's education would have NO effect on you wages other than by increasing your own education (e.g. social networks, parental job connections, etc.). However, we are reasonably satisfied with our results so we try a 2SLS model. 
+
+* However, unlike when we had a random assignment as an IV,  it is less clear that your mother's and father's education would have NO effect on you wages other than by increasing your own education (e.g. social networks, parental job connections, etc.). However, we are reasonably satisfied with our results so we try a 2SLS model.  
 ```
 ivregress 2sls lwage exper expersq (educ=motheduc fatheduc), first
 estat endogenous
