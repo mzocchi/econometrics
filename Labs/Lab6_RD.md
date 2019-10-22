@@ -38,6 +38,7 @@ gen over21 = agecell >= 21
 gen age2 = age^2
 gen over_age = over21*age
 gen over_age2 = over21*age2
+gen ext_oth = external - homicide - suicide - mva
 ```
 
 * Next, we will run a couple of simple OLS regression to generate a predicted values for mortality. (Note: the variable All is the "all cause" mortality rate per 100,000).
@@ -60,10 +61,10 @@ twoway  (scatter all agecell) ///
 
 **Non-linear model**
 * For our estimate to be accurate, we assumed that mortality is a linear function of age. If age and mortality is a nonlinear function but we model it as a linear function, we may perceive a jump in the data that is not actually there. 
-* Let's try putting a quadratic function of age into the model (age and age-squared).
-* We can also allow for a different slope coefficient to the left and right of the cutoff by adding in an interaction term.
+* Let's try putting a polynomial function of age into the model (age, age-squared, over_age, and over_age21).
+* A polynomial function is just like the quadratic function we've seen before, but this time we allow the curve to change it's shape before and after the cutoff.
 ```
-esto: reg all age age2 over21 over_age over_age2  
+reg all age age2 over21 over_age over_age2  
 eststo fancy
 predict allfitqi
 ```
@@ -72,7 +73,7 @@ predict allfitqi
 ```
 esttab simple fancy, se
 ```
-* The "fancy" quadratic model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
+* The "fancy" polynomial model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
 * Now let's look at the graph of these results
 ```
 twoway  (scatter all agecell) ///
@@ -94,22 +95,30 @@ twoway  (scatter all agecell) ///
 ```
 * "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
+eststo mva_simple
 predict exfitlin
+
 reg mva age age2 over21 over_age over_age2
+eststo mva_fancy
 predict exfitqi
+
 * "Internal causes" on linear, and quadratic on each side
 reg internal age over21
+eststo internal_simple
 predict infitlin
+
 reg internal age age2 over21 over_age over_age2
+eststo internal_fancy
 predict infitqi
+
 label variable mva  "Mortality rate (per 100,000)"
 label variable infitqi  "Mortality rate (per 100,000)"
 label variable exfitqi  "Mortality rate (per 100,000)"
 ```
 
+* First we examine the results visually:
 
-<p style="text-align: center;">Figure 3. <br> RD Estimates of MLDA effects on mortality by cause of death</p>
-
+<p style="text-align: center;">Figure 3. <br> RD Estimates of MLDA effects on mortality by cause of death</p>  
 
 ```
 twoway (scatter  mva internal agecell) ///
@@ -118,7 +127,58 @@ twoway (scatter  mva internal agecell) ///
 		text(28 20.1 "Motor Vehicle Fatalities") text(17 22 "Deaths from Internal Causes") ///
 		xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(10(5)40, angle(horiz))
 ```
-* This figure should help convince the skeptic. We see a clear jump in mortality at the MLDA cutoff for MVA, with no evidence of a non-linear trend. We also do not see much of a change in mortality from internal causes at the cutoff - the jump is insignificant.
+* Now, let's look at the results from the regression:
+```
+esttab mva_simple internal_simple mva_fancy internal_fancy, b(2) se(2)
+```
+* The figure and regression results should help convince the skeptic. We see a clear jump in mortality at the MLDA cutoff for MVA, with no evidence of a non-linear trend. We also do not see much of a change in mortality from internal causes at the cutoff - the jump is insignificant.
+
+**Bandwidths**
+* The smaller the bandwidth, the less a concern of a nonlinear trend. However, a smaller bandwidth will reduce the sample size we have to work with and less data means less precision in our estimates. There are statistical methods to choose an optimal bandwidth, but most importantly you want to make sure that your choice of bandwidth does not change your findings substantially. 
+
+* Let's go back to the simple all-cause model but this time restrict the age range to 20-22:
+```
+reg all age over21 if agecell>=20 & agecell<=22
+eststo simple2021
+predict allfitlin2021
+```
+```
+twoway	(scatter all agecell) ///
+				(line allfitlin2021 agecell if age <0, lcolor(black) lwidth(medthick)) ///
+				(line allfitlin2021 agecell if age >=0, lcolor(black red) lwidth(medthick medthick)) ///
+				 if agecell>=20 & agecell<=22 ///
+				 , xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
+```
+```
+esttab simple simple2021 fancy, b(2) se(2)
+```
+* The results from the restricted bandwidth are still significant and are closer to the "fancy" model estimates.
+
+**Extra**
+* We can run code to get the estimates on all the causes of death we have. The foreach command runs a loop for each variable specified. We use the outreg2 command to export the results to a plain text file.   
+You may need to install outreg2 first: ``` ssc install outreg2 ```
+```
+// Simple Model:
+foreach x in all mva suicide homicide ext_oth internal alcohol {
+reg `x' age over21, robust
+if ("`x'"=="all"){
+	outreg2 over21 using "table_simple.txt", replace bdec(2) sdec(2) keep(over21) nocons
+}
+else{
+	outreg2 over21 using "table_simple.txt", append  bdec(2) sdec(2) keep(over21) nocons
+}
+// Fancy Model:
+}
+foreach x in all mva suicide homicide ext_oth internal alcohol {
+reg `x' age over21, robust
+if ("`x'"=="all"){
+	outreg2 over21 using "table_fancy.txt", replace bdec(2) sdec(2) keep(over21) nocons
+}
+else{
+	outreg2 over21 using "table_fancy.txt", append  bdec(2) sdec(2) keep(over21) nocons
+}
+}
+```  
 
 
    
