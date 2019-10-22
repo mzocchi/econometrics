@@ -58,7 +58,7 @@ twoway  (scatter all agecell) ///
 
 * We know that mortality changes with age for reasons unrelated to the MLDA (e.g. cancer, homicide, suicide, motor vehicle crashes, etc.). Is it safe to assume that there are no other effects on mortality other than the MLDA at age 21?
 
-**Limitations**
+**Non-linear model**
 * For our estimate to be accurate, we assumed that mortality is a linear function of age. If age and mortality is a nonlinear function but we model it as a linear function, we may perceive a jump in the data that is not actually there. 
 * Let's try putting a quadratic function of age into the model (age and age-squared).
 * We can also allow for a different slope coefficient to the left and right of the cutoff by adding in an interaction term.
@@ -70,12 +70,55 @@ predict allfitqi
 
 * Now, let's compare the two models.
 ```
-esttab simple fancy
+esttab simple fancy, se
 ```
-* The fancy quadratic model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 ()
+* The "fancy" quadratic model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
+* Now let's look at the graph of these results
+```
+twoway  (scatter all agecell) ///
+		(line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(med medthick) lpattern(dash)) ///
+        (line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(med medthick) lpattern(dash)) ///
+		, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
+```
+* The fancy model seems to fit the data better than the linear model: Death rates jump sharply at age 21, but then recover somewhat quickly in the first few months.
+
+* Both the fancy and simple model show a large jump at the cutoff. However, what is interesting is that the effect seem to sustain at least though to age 23. The jump in death rates at the cutoff shows that drinking behavior responds to alcohol access, but the treatment effect to age 23 is still visible.
+
+**Robustness Checks**
+* How do we know that the jump in mortality at the cutoff is due to drinking specifically? A skeptic might point out that we do not have individual-level data about drinking habits and we are just assuming that people drink more from 21-23 than from 19-21. 
+
+* We do have data on mortality rates from specific causes of death, which might help us make our case. Alcohol-related diseases (e.g. cirrhosis of the liver) are normally found in much older adults, but motor vehicle accidents (MVA) are plausibly closely tied to alcohol-related deaths in young adults. If true, we should see a large jump in MVA mortality and little jump in internal causes of death (e.g. cancer). We might also expect that external causes of death (suicide, homicide, unintentional injuries) would also be sensitive to alcohol consumption. 
+
+* The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death.
+
+```
+* "Motor Vehicle Accidents" on linear, and quadratic on each side
+reg mva age over21
+predict exfitlin
+reg mva age age2 over21 over_age over_age2
+predict exfitqi
+* "Internal causes" on linear, and quadratic on each side
+reg internal age over21
+predict infitlin
+reg internal age age2 over21 over_age over_age2
+predict infitqi
+label variable mva  "Mortality rate (per 100,000)"
+label variable infitqi  "Mortality rate (per 100,000)"
+label variable exfitqi  "Mortality rate (per 100,000)"
+```
 
 
+<p style="text-align: center;">Figure 3. <br> RD Estimates of MLDA effects on mortality by cause of death</p>
 
+
+```
+twoway (scatter  mva internal agecell) ///
+		(line exfitqi infitqi agecell if agecell < 21) ///
+        (line exfitqi infitqi agecell if agecell >= 21), ///
+		text(28 20.1 "Motor Vehicle Fatalities") text(17 22 "Deaths from Internal Causes") ///
+		xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(10(5)40, angle(horiz))
+```
+* This figure should help convince the skeptic. We see a clear jump in mortality at the MLDA cutoff for MVA, with no evidence of a non-linear trend. We also do not see much of a change in mortality from internal causes at the cutoff - the jump is insignificant.
 
 
    
