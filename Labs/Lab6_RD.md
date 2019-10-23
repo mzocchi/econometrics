@@ -51,8 +51,8 @@ predict allfitlin
 * Let's plot the results from the first model using the observed and predicted values
 ``` 
 twoway  (scatter all agecell) ///
-		(line allfitlin agecell if age < 0, lcolor(black) lwidth(medthick)) ///
-        (line allfitlin agecell if age >= 0, lcolor(black red) lwidth(medthick medthick)) ///
+		(line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
+        (line allfitlin agecell if age >= 0, lcolor(black red) lwidth(medium)) ///
 		, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
 ```
 * In *sharp* RD designs, treatment switches cleanly off or on as the the running variable (e.g. age) passes a cutoff. The MLDA is a sharp function of age, so investigation of MLDA effects on mortality is a sharp RD study.
@@ -61,27 +61,28 @@ twoway  (scatter all agecell) ///
 
 **Non-linear model**
 * For our estimate to be accurate, we assumed that mortality is a linear function of age. If age and mortality is a nonlinear function but we model it as a linear function, we may perceive a jump in the data that is not actually there. 
-* Let's try putting a polynomial function of age into the model (age, age-squared, over_age, and over_age21).
-* A polynomial function is just like the quadratic function we've seen before, but this time we allow the curve to change it's shape before and after the cutoff.
+* Let's try putting a quadratic function of age into the model. We do this just like we have done before, but this time we allow the curve to change it's shape before and after the cutoff by including the interaction squared term.
 ```
 reg all age age2 over21 over_age over_age2  
 eststo fancy
 predict allfitqi
 ```
 
-* Now, let's compare the two models.
-```
-esttab simple fancy, se
-```
-* The "fancy" polynomial model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
-* Now let's look at the graph of these results
+* Now, let's look at the graph of these results
 ```
 twoway  (scatter all agecell) ///
-		(line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(med medthick) lpattern(dash)) ///
-        (line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(med medthick) lpattern(dash)) ///
-		, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
+		(line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(medium) lpattern(dash)) ///
+        (line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(medium) lpattern(dash)) ///
+		, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz)) ///
+		title("Figure 2. Quadratic control in an RD design")
 ```
 * The fancy model seems to fit the data better than the linear model: Death rates jump sharply at age 21, but then recover somewhat quickly in the first few months.
+
+* Let's compare the results of the two models in a table:
+```
+esttab simple fancy, b(2) se(2)
+```
+* The "fancy" polynomial model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
 
 * Both the fancy and simple model show a large jump at the cutoff. However, what is interesting is that the effect seem to sustain at least though to age 23. The jump in death rates at the cutoff shows that drinking behavior responds to alcohol access, but the treatment effect to age 23 is still visible.
 
@@ -96,11 +97,11 @@ twoway  (scatter all agecell) ///
 * "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
 eststo mva_simple
-predict exfitlin
+predict mvafitlin
 
 reg mva age age2 over21 over_age over_age2
 eststo mva_fancy
-predict exfitqi
+predict mvafitqi
 
 * "Internal causes" on linear, and quadratic on each side
 reg internal age over21
