@@ -28,6 +28,12 @@ Aggregated mortality data by age (in year-months) for adults between ages 19-23.
 
 * Regression discontinuity can address endogeneity when treatment assignment is achieved by using some cutoff indicator (e.g. providing enrichment program to students who score below 50% on a test). Such assignment affords us the opportunity to look at drastic changes (a.k.a. discontinuities) in the outcome variable between individuals with the treatment and those without the treatment around the cutoff point.  So, even if the treatment may be associated with other factors that we cannot account for, we know that these factors do not change/jump at the cutoff. 
 
+#### Load data
+```
+cd "..."
+use MMCh4.dta, clear
+```
+
 #### Preliminary Analysis:
 * Particularly for regression discontinuity design, descriptive analysis should include examination of the distribution of treatment ("cutoff") variable.
 
