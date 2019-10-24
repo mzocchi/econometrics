@@ -57,9 +57,9 @@ predict allfitlin
 * Let's plot the results from the first model using the observed and predicted values
 ``` 
 twoway  (scatter all agecell) ///
-		(line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
+	(line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
         (line allfitlin agecell if age >= 0, lcolor(black red) lwidth(medium)) ///
-		, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
+	, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz))
 ```
 * In *sharp* RD designs, treatment switches cleanly off or on as the the running variable (e.g. age) passes a cutoff. The MLDA is a sharp function of age, so investigation of MLDA effects on mortality is a sharp RD study.
 
