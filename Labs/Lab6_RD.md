@@ -6,8 +6,8 @@ TA: Mark Zocchi (mzocchi@brandeis.edu)
 Apply OLS estimation for regression-discontinuity research design 
 
 #### Objectives:
-1.	Identify treatment cutoff and create a treatment variable for regression-discontinuity design
-2.	Analyze data using various bandwidths
+1. Identify treatment effect using regression-discontinuity design
+2. Analyze treatment effect using various bandwidths
 
 #### Research Question:
 1. Does legal access to alcohol increase mortality in young adults (ages 19-23)?
