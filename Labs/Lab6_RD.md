@@ -51,8 +51,9 @@ gen ext_oth = external - homicide - suicide - mva
 ```
 reg all age over21
 eststo simple
-predict allfitlin  
+predict allfitlin
 ```
+
 * Looking at the first model (without the interaction term), we see that mortality declines with age (although, not significant in this dataset). In the second model (with an interaction term) we see that mortality increases with age from 19-21, jumps up quite a lot at 21, but then decreases with age after 21.
 * Let's plot the results from the first model using the observed and predicted values
 ``` 
@@ -61,8 +62,8 @@ twoway  (scatter all agecell) ///
 	(line allfitlin agecell if age >= 0, lcolor(black) lwidth(medium)) ///
 	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
 	title("Figure 1." "A sharp RD estimate of MLDA mortality effects", size(medium))
-
 ```
+
 * In *sharp* RD designs, treatment switches cleanly off or on as the the running variable (e.g. age) passes a cutoff. The MLDA is a sharp function of age, so investigation of MLDA effects on mortality is a sharp RD study.
 
 * We know that mortality changes with age for reasons unrelated to the MLDA (e.g. cancer, homicide, suicide, motor vehicle crashes, etc.). Is it safe to assume that there are no other effects on mortality other than the MLDA at age 21?
@@ -83,8 +84,8 @@ twoway  (scatter all agecell) ///
 	(line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(medium) lpattern(dash)) ///
 	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
 	title("Figure 2." "Quadratic control in an RD design", size(medium))
-
 ```
+
 * The fancy model seems to fit the data better than the linear model: Death rates jump sharply at age 21, but then recover somewhat quickly in the first few months.
 
 * Let's compare the results of the two models in a table:
@@ -92,6 +93,7 @@ twoway  (scatter all agecell) ///
 esttab simple fancy, b(2) se(2) ///
 	title("Table 1. Sharp RD estimates of MLDA effects on all-cause mortality") nomtitles
 ```
+
 * The "fancy" quadratic model generate a larger estimate of the MLDA effect at the cutoff than does the simple linear model, equal to about 9.5 deaths per 100,000 (SE=1.99).
 
 * Both the fancy and simple model show a large jump at the cutoff. However, what is interesting is that the effect seem to sustain at least though to age 23. The jump in death rates at the cutoff shows that drinking behavior responds to alcohol access, but the treatment effect to age 23 is still visible.
@@ -102,7 +104,6 @@ esttab simple fancy, b(2) se(2) ///
 * We do have data on mortality rates from specific causes of death, which might help us make our case. Alcohol-related diseases (e.g. cirrhosis of the liver) are normally found in much older adults, but motor vehicle accidents (MVA) are plausibly closely tied to alcohol-related deaths in young adults. If true, we should see a large jump in MVA mortality and little jump in internal causes of death (e.g. cancer). We might also expect that external causes of death (suicide, homicide, unintentional injuries) would also be sensitive to alcohol consumption. 
 
 * The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death.
-
 ```
 * "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
@@ -136,11 +137,13 @@ twoway	(scatter  mva internal agecell) ///
 	xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(10(5)40, angle(horiz)) legend(off) ///
 	title("Figure 3." "RD Estimates of MLDA effects on mortality by cause of death", size(medium))
 ```
+
 * Now, let's look at the results from the regression:
 ```
 esttab mva_simple internal_simple mva_fancy internal_fancy, b(2) se(2) ///
 	title("Table 2. Sharp RD estimates of MLDA effects on mortality by cause of death")
 ```
+
 * The figure and regression results should help convince the skeptic. We see a clear jump in mortality at the MLDA cutoff for MVA, with no evidence of a non-linear trend. We also do not see much of a change in mortality from internal causes at the cutoff - the jump is insignificant.
 
 **Bandwidths**
@@ -152,6 +155,7 @@ reg all age over21 if agecell>=20 & agecell<=22
 eststo simple2021
 predict allfitlin2021
 ```
+
 ```
 twoway	(scatter all agecell) ///
 	(line allfitlin2021 agecell if age <0, lcolor(black) lwidth(medthick)) ///
@@ -160,10 +164,12 @@ twoway	(scatter all agecell) ///
 	, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz)) ///
 	title("Figure 4." "A sharp RD estimate of MLDA mortality effects (ages 20-22)", size(medium))
 ```
+
 ```
 esttab simple2021, b(2) se(2) ///
 	title("Table 3. Sharp RD estimate of MLDA effects on all-cause mortality (ages 20-22)") nomtitles
 ```
+
 * The results from the restricted bandwidth are still significant and are closer to the "fancy" model estimates.
 
 **Extra**
@@ -190,7 +196,4 @@ else{
 	outreg2 over21 using "table_fancy.txt", append  bdec(2) sdec(2) keep(over21) nocons
 }
 }
-```  
-
-
-   
+```
