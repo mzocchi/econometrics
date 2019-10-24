@@ -179,10 +179,10 @@ if ("`x'"=="all"){
 else{
 	outreg2 over21 using "table_simple.txt", append  bdec(2) sdec(2) keep(over21) nocons
 }
-// Fancy Model:
 }
+// Fancy Model:
 foreach x in all mva suicide homicide ext_oth internal alcohol {
-reg `x' age over21, robust
+reg `x' age age2 over21 over_age over_age2, robust
 if ("`x'"=="all"){
 	outreg2 over21 using "table_fancy.txt", replace bdec(2) sdec(2) keep(over21) nocons
 }
