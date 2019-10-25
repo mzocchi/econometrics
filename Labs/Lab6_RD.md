@@ -103,7 +103,7 @@ esttab simple fancy, b(2) se(2) ///
 
 * We do have data on mortality rates from specific causes of death, which might help us make our case. Alcohol-related diseases (e.g. cirrhosis of the liver) are normally found in much older adults, but motor vehicle accidents (MVA) are plausibly closely tied to alcohol-related deaths in young adults. If true, we should see a large jump in MVA mortality and little jump in internal causes of death (e.g. cancer). We might also expect that external causes of death (suicide, homicide, unintentional injuries) would also be sensitive to alcohol consumption. 
 
-* The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death.
+* The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death:
 ```
 * "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
