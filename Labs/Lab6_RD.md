@@ -101,28 +101,33 @@ esttab simple fancy, b(2) se(2) ///
 **Robustness Checks**
 * How do we know that the jump in mortality at the cutoff is due to drinking specifically? A skeptic might point out that we do not have individual-level data about drinking habits and we are just assuming that people drink more from 21-23 than from 19-21. 
 
-* We do have data on mortality rates from specific causes of death, which might help us make our case. Alcohol-related diseases (e.g. cirrhosis of the liver) are normally found in much older adults, but motor vehicle accidents (MVA) are plausibly closely tied to alcohol-related deaths in young adults. If true, we should see a large jump in MVA mortality and little jump in internal causes of death (e.g. cancer). We might also expect that external causes of death (suicide, homicide, unintentional injuries) would also be sensitive to alcohol consumption. 
+* We do have data on mortality rates from specific causes of death, which might help us make our case. Alcohol-related diseases (e.g. cirrhosis of the liver) are normally found in much older adults, but motor vehicle accidents (MVA) are plausibly closely tied to alcohol-related deaths in young adults. If true, we should see a large jump in MVA mortality and little jump in internal causes of death (e.g. cancer). We might also expect that external causes of death (suicide, homicide, unintentional injuries) would also be sensitive to alcohol consumption.
 
 * The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death:
+
 ```
-// "Motor Vehicle Accidents" on linear, and quadratic on each side
+* "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
 eststo mva_simple
 predict mvafitlin
-
+```
+```
 reg mva age age2 over21 over_age over_age2
 eststo mva_fancy
 predict mvafitqi
-
-// "Internal causes" on linear, and quadratic on each side
+```
+```
+* "Internal causes" on linear, and quadratic on each side
 reg internal age over21
 eststo internal_simple
 predict infitlin
-
+```
+```
 reg internal age age2 over21 over_age over_age2
 eststo internal_fancy
 predict infitqi
-
+```
+```
 label variable mva  "Mortality rate (per 100,000)"
 label variable infitqi  "Mortality rate (per 100,000)"
 label variable exfitqi  "Mortality rate (per 100,000)"
