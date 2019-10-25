@@ -105,7 +105,7 @@ esttab simple fancy, b(2) se(2) ///
 
 * The following Stata code will generate the "simple" and "fancy" models for MVA and internal causes of death:
 ```
-* "Motor Vehicle Accidents" on linear, and quadratic on each side
+// "Motor Vehicle Accidents" on linear, and quadratic on each side
 reg mva age over21
 eststo mva_simple
 predict mvafitlin
@@ -114,7 +114,7 @@ reg mva age age2 over21 over_age over_age2
 eststo mva_fancy
 predict mvafitqi
 
-* "Internal causes" on linear, and quadratic on each side
+// "Internal causes" on linear, and quadratic on each side
 reg internal age over21
 eststo internal_simple
 predict infitlin
