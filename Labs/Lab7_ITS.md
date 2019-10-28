@@ -3,7 +3,7 @@ Fall 2019
 TA: Mark Zocchi (mzocchi@brandeis.edu)
 
 ***
-* This lab uses Stata code and tutorial from the the paper: *Interrupted time series regression for the evaluation of public health  interventions: a tutorial* (J. Lopez Bernal, S. Cummins, A. Gasparrini; IJE 2016).
+* This lab uses Stata code and tutorial from the the paper: *Interrupted time series regression for the evaluation of public health  interventions: a tutorial* (J. Lopez Bernal, S. Cummins, A. Gasparrini; IJE 2016. Available at: https://academic.oup.com/ije/article/46/1/348/2622842).
 ***
 
 #### Goal
