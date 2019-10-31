@@ -2,9 +2,7 @@
 Fall 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)
 
-***
 * This lab uses Stata code and tutorial from the the paper: *Interrupted time series regression for the evaluation of public health  interventions: a tutorial* (J. Lopez Bernal, S. Cummins, A. Gasparrini; IJE 2016. Available at: https://academic.oup.com/ije/article/46/1/348/2622842).
-***
 
 #### Goal
 1. Learn the requirements for an ITS design and how to use ITS to estimate the impact of an intervention.
@@ -13,7 +11,8 @@ TA: Mark Zocchi (mzocchi@brandeis.edu)
 1. Review the requirements for an ITS design
 2. Hypothesize how the intervention may impact the outcome
 3. Descriptive analysis
-4. Regression analysis 
+4. Regression analysis
+5. Addressing methodological issues 
 
 #### Research Question
 1. Did the 2005 indoor public smoking ban reduce hospital admissions for acute coronary events (ACE)?
@@ -59,15 +58,14 @@ cd " . . . "
 import delimited "sicily.csv"
 ```
 * This dataset includes the following variables:   
-|  Variable | Description  |
-|:----------|:-------------|
-| year  
-| month
-| time      |  elapsed time since the start of the study |
-| aces      |  count of acute coronary episodes in Sicily per month (the outcome) |
-| smokban   |  smoking ban (the intervention) coded 0 before the intervention and 1 after | 
-| pop       |  the population of Sicily (in 10000s) |
-| stdpop    |  age standardised population |
+Variable | Description  
+year    
+month  
+time |  elapsed time since the start of the study  
+aces |  count of acute coronary episodes in Sicily per month (the outcome)  
+smokban |  smoking ban (the intervention) coded 0 before the intervention and 1 after  
+pop |  the population of Sicily (in 10000s)  
+stdpop |  age standardised population  
 
 * Here we convert the counts into a rate and examine a scatter plot of the pre-intervention data
 ```
@@ -141,7 +139,6 @@ ytitle(Std rate x 10000) yscale(range(0 .)) ylabel(#5, labsize(small) angle(hori
 xtick(0.5(12)60.5) xlabel(6"2002" 18"2003" 30"2004" 42"2005" 54"2006", noticks labsize(small)) xtitle(year) ///
 xline(36.5)
 ```
-
 
 #### Objective 5: addressing methodological issues
 
