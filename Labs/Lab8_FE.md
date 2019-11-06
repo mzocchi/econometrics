@@ -27,6 +27,10 @@ Panel data consisting of crime data rates and other related variables of 90 Nort
 
 
 #### Objective 1. Preliminary Analysis for Panel Data
+```
+cd ". . ."
+use crime.dta, clear
+```
 
 **A.	Estimate an OLS model for model comparison purposes**
 Because we have a log DV and log IVs we interpret the coefficients to mean that a 1% increase in probability of arrest lowers the crime rate by 0.72%. The coefficient of police per capita predicts that a 1% increase in police per capita increases the crime rate by about 0.4%.
@@ -34,6 +38,13 @@ Because we have a log DV and log IVs we interpret the coefficients to mean that 
 reg lcrmrte d82-d87 lprbarr lprbconv lprbpris lavgsen lpolpc
 estimates store ols1
 ```
+
+One common problem with this regular OLS approach is that we can’t control for things if we can’t measure them (and there are lots of things we can’t measure or don’t have data for!). For example, anything that impacts any of the deterrent factors and crime will bias our estimates (e.g. poverty increases crimes per person and increases probability of conviction and serving time given a conviction). IF we had a measure of poverty by county-year, we could just control for it; however, this could include other things more difficult to measure than poverty, such as the trust a community has with law enforcement, liklihood of witnesses testifying, etc. 
+
+If we can observe each person/firm/county/country multiple times, then we don't need to control for the actual variable(s) of interest (e.g. poverty, trust of law enforcement) and just control for person/firm/county/country identity instead. This will control for EVERYTHING unique to that individual/firm/county, whether we can measure it or not! Essentially we compare the counties *to themselves* at different periods of time.
+
+We are ignoring all differences between counties and looking only at differences *within* counties. Fixed Effects is sometimes also referred to as the “within” estimator.
+
 **B. Set up dataset for panel data analysis in Stata**
 Stata includes a set of “xt” commands to summarize and analyze panel and clustered data.  Before any analysis, however, we must indicate that we will be working with a panel/clustered data set by running the xtset command followed by the group ID variable then the time variable. Stata output indicating that the panel is strongly balanced means that there isn’t any missing observation per group.
 ```
