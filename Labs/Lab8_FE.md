@@ -45,6 +45,8 @@ If we can observe each person/firm/county/country multiple times, then we don't 
 
 We are ignoring all differences between counties and looking only at differences *within* counties. Fixed Effects is sometimes also referred to as the “within” estimator.
 
+**Important** This approach assumes that all the unobserved variables we are concerned with CAN be described by county alone. In other words, these unobserved factors operate by things that are *fixed* within the county across the entire time period. If we are concened that one (or more) of these factors *changes significantly over time within that county*, fixed effects won’t help! Time-varying things doesn’t mean that fixed effects doesn’t work, it just means you need to control for that stuff to.
+
 **B. Set up dataset for panel data analysis in Stata**
 Stata includes a set of “xt” commands to summarize and analyze panel and clustered data.  Before any analysis, however, we must indicate that we will be working with a panel/clustered data set by running the xtset command followed by the group ID variable then the time variable. Stata output indicating that the panel is strongly balanced means that there isn’t any missing observation per group.
 ```
