@@ -1,4 +1,4 @@
-# HS 409A Lab 6: Interrupted Time Series (ITS) Analysis
+# HS 409A Lab 7: Interrupted Time Series (ITS) Analysis
 Fall 2019  
 TA: Mark Zocchi (mzocchi@brandeis.edu)
 
