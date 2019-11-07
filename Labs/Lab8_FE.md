@@ -25,12 +25,14 @@ Panel data consisting of crime data rates and other related variables of 90 Nort
 | <br>  lavgsen<br>         | <br>  Log of average sentence (sanction severity)<br>                                                                                 |
 | <br>  lpolpc<br>          | <br>  Log of police officers per capita<br>                                                                                           |
 
+#### Load and examine the Dataset
+```
+use crimenc.dta, clear
+codebook, compact
+browse
+```
 
 #### Objective 1. Preliminary Analysis for Panel Data
-```
-cd ". . ."
-use crime.dta, clear
-```
 
 **A.	Estimate an OLS model for model comparison purposes**
 Because we have a log DV and log IVs we interpret the coefficients to mean that a 1% increase in probability of arrest lowers the crime rate by 0.72%. The coefficient of police per capita predicts that a 1% increase in police per capita increases the crime rate by about 0.4%.
@@ -39,13 +41,13 @@ reg lcrmrte d82-d87 lprbarr lprbconv lprbpris lavgsen lpolpc
 estimates store ols1
 ```
 
-One common problem with this regular OLS approach is that we can’t control for things if we can’t measure them (and there are lots of things we can’t measure or don’t have data for!). For example, anything that impacts any of the deterrent factors and crime will bias our estimates (e.g. poverty increases crimes per person and increases probability of conviction and serving time given a conviction). IF we had a measure of poverty by county-year, we could just control for it; however, this could include other things more difficult to measure than poverty, such as the trust a community has with law enforcement, liklihood of witnesses testifying, etc. 
+One common problem with this regular OLS approach is that we can’t control for things if we can’t measure them (and there are lots of things we can’t measure or don’t have data for!). For example, anything that impacts any of the deterrent factors and crime will bias our estimates (e.g. poverty increases crimes per person and increases probability of conviction and serving time given a conviction). IF we had a measure of poverty by county-year, we could just control for it; however, this could include other things more difficult to measure than poverty, such as the trust a community has with law enforcement, likelihood of witnesses testifying, etc. 
 
 If we can observe each person/firm/county/country multiple times, then we don't need to control for the actual variable(s) of interest (e.g. poverty, trust of law enforcement) and just control for person/firm/county/country identity instead. This will control for EVERYTHING unique to that individual/firm/county, whether we can measure it or not! Essentially we compare the counties *to themselves* at different periods of time.
 
 We are ignoring all differences between counties and looking only at differences *within* counties. Fixed Effects is sometimes also referred to as the “within” estimator.
 
-**Important** This approach assumes that all the unobserved variables we are concerned with CAN be described by county alone. In other words, these unobserved factors operate by things that are *fixed* within the county across the entire time period. If we are concened that one (or more) of these factors *changes significantly over time within that county*, fixed effects won’t help! Time-varying things doesn’t mean that fixed effects doesn’t work, it just means you need to control for that stuff to.
+**Important** This approach assumes that all the unobserved variables we are concerned with CAN be described by county alone. In other words, these unobserved factors operate by things that are *fixed* within the county across the entire time period. If we are concerned that one (or more) of these factors *changes significantly over time within that county*, fixed effects won’t help! Time-varying things doesn’t mean that fixed effects doesn’t work, it just means you need to control for that stuff to.
 
 **B. Set up dataset for panel data analysis in Stata**
 Stata includes a set of “xt” commands to summarize and analyze panel and clustered data.  Before any analysis, however, we must indicate that we will be working with a panel/clustered data set by running the xtset command followed by the group ID variable then the time variable. Stata output indicating that the panel is strongly balanced means that there isn’t any missing observation per group.
@@ -62,6 +64,12 @@ xtsum is similar to summarize. It reports descriptive statistics (mean, SD, min,
 xtsum  county year crmrte prbarr prbconv prbpris avgsen polpc
 ```
 
+You can use the xtline command to examine trends within counties (I recommend looking at just a handful of counties at a time)
+```
+xtline crmrte if county<10
+xtline crmrte if county>=10 & county<=19
+```
+
 #### Objective 2. Estimate a fixed effects model
 **A.	Estimate a two-way fixed effects model**
 We begin by estimating a two-way fixed effects model.  It is called two-way because we are assuming that there is a 1) group effect (county) and a 2) time effect (over the years) on the dependent variable.  
@@ -69,13 +77,15 @@ We begin by estimating a two-way fixed effects model.  It is called two-way beca
 Fixed effects models remove the *time-invariant* variables that are unobservable from our model (e.g. policing culture of a county). It removes the synergistic effects between the unobservable variables with the other independent variables on the outcome variable, giving us unbiased estimates. For example, if we assume that the unobservable characteristics of each county influence its arrest rates, which in turn affect crime rates, we must account for this association. 
 ```
 xtreg lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc,fe 
-estimates store fe2way
+estimates store 
+esttab OLS1 fe2way,  b(%7.2f) star stats(N r2 r2_a)
 ```
 Some statistics to consider from the FE Stata output:
-- corr(u_i, Xb) = Correlation between ai and the regressors in the fixed effects model
-rho = variance not explained by differences across entities. Also known as the intraclass correlation.  This  is how much of the total variance is due to the fixed effects.
-- sigma_u = variance associated with the unobserved effect ai
-- sigma_e = variance associated with the idiosyncratic error ui
+- corr(u_i, Xb) = Correlation between ui and the regressors in the fixed effects model
+rho = variance not explained by differences *across* entities. Also known as the intraclass correlation.  This  is how much of the total variance is due to the fixed effects.
+- sigma_u = sd of residuals at the cluster level (ui)
+- sigma_e = sd of residuals at the individual level (ei)
+- rho = sigma_u^2 / (sigma_u^2 + sigma_e^2) 
 
 At the bottom of the output you see a line that starts with “F test that all u_i=0”. When all the fixed effects are zero, the fixed effects model collapses to a normal regression, so this test compares the fixed effects model with the OLS model. The null (OLS) is rejected, in favor of FE. Unobserved heterogeneity effect exists.
 
@@ -95,7 +105,7 @@ Compare the models:
 ```
 esttab ols1 fe2way lsdv,drop(*county) b(%7.2f) star stats(N r2 r2_a)
 ```
-**One-way fixed effects model**
+**C. One-way fixed effects model**
 If we run a model without the year dummies, we are only accounting for the group effects.  This means that we assume that there is no time effect on the dependent variable.
 ```
 xtreg lcrmrte lprbarr lprbconv lprbpris lavgsen lpolpc, fe
@@ -106,4 +116,27 @@ To determine if the time effect may be important in the model, we can conduct an
 ```
 xtreg lcrmrte d82-d87 lprbarr lprbconv lprbpris lavgsen lpolpc, fe
 test  d82 d83 d84 d85 d86 d87
+```
+
+**D. Heterosckedastcity and autocorrelation** 
+* Check for heterosckedasticity 
+```
+ssc install xttest3 
+xtreg lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc,fe 
+xttest3 
+```
+* The null hypothesis is homoskedasticity. If p<0.05, you can reject the null and assume you have heteroscedasticity.
+* You can apply robust standard errors to take care of this: Huber/White or sandwich estimators
+```
+xtreg lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc,fe robust
+```
+* Check for serial correlation
+```
+ssc install xtserial
+xtserial lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc
+```
+*xtscc corrects for both heteroscedasitiy and autocorrelation. There are options to specify the lag. 
+```
+ssc install xtscc
+xtscc lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc,fe 
 ```
