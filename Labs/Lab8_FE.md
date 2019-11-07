@@ -77,7 +77,7 @@ We begin by estimating a two-way fixed effects model.  It is called two-way beca
 Fixed effects models remove the *time-invariant* variables that are unobservable from our model (e.g. policing culture of a county). It removes the synergistic effects between the unobservable variables with the other independent variables on the outcome variable, giving us unbiased estimates. For example, if we assume that the unobservable characteristics of each county influence its arrest rates, which in turn affect crime rates, we must account for this association. 
 ```
 xtreg lcrmrte d82 d83 d84 d85 d86 d87 lprbarr lprbconv lprbpris lavgsen lpolpc,fe 
-estimates store 
+estimates store fe2way
 esttab OLS1 fe2way,  b(%7.2f) star stats(N r2 r2_a)
 ```
 Some statistics to consider from the FE Stata output:
