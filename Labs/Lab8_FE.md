@@ -81,7 +81,7 @@ estimates store fe2way
 esttab OLS1 fe2way,  b(%7.2f) star stats(N r2 r2_a)
 ```
 Some statistics to consider from the FE Stata output:
-- corr(u_i, Xb) = Correlation between ui and the regressors in the fixed effects model
+- corr(u_i, Xb) = Correlation between ui and the regressors in the fixed effects model  
 rho = variance not explained by differences *across* entities. Also known as the intraclass correlation.  This  is how much of the total variance is due to the fixed effects.
 - sigma_u = sd of residuals at the cluster level (ui)
 - sigma_e = sd of residuals at the individual level (ei)
