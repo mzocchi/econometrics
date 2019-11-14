@@ -114,7 +114,7 @@ xttest0
 #### C. Calculate lambda
 * Lambda specifies how much weight is given to the mean for the unit (across time-periods), as opposed to the individual observation. I generally think of lambda as the degree of the variations between groups/clusters. So if there isn’t variation across groups, then OLS is appropriate.  Otherwise, we should consider fixed or random effects.
 
-  >Note: Wooldrige refers to the between variance as σa, which is denoted as σu in Stata. Woodridge refers to the within variance as σu, which is demoted as σe in Stata.
+  >Note: Wooldrige refers to the between variance as σa, which is denoted as sigma_u in Stata. Woodridge refers to the within variance as σu, which is demoted as sigma_e in Stata.
 
 * Lambda formula: λ = 1 –   [σ2u  / (σ2u + Tσa^2)]^0.5  
 > If λ =0, there is no or negligible variance between units, relative to the variance within units.  
