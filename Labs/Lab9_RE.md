@@ -116,7 +116,7 @@ xttest0
 
   >Note: Wooldrige refers to the between variance as σa, which is denoted as sigma_u in Stata. Woodridge refers to the within variance as σu, which is demoted as sigma_e in Stata.
 
-* Lambda formula: λ = 1 –   [σ2u  / (σ2u + Tσa^2)]^0.5  
+* Lambda formula: λ = 1 –   [σu^2  / (σu^2 + Tσa^2)]^0.5  
 > If λ =0, there is no or negligible variance between units, relative to the variance within units.  
 If λ =1, there is a lot of variance between units, relative to the variance within units.
 
