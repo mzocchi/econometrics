@@ -42,14 +42,16 @@ xtsum id year fare passen dist
 table id, contents(mean fare mean passen mean dist), if id<=10
 ```
 
-* **Scatter plot** of airfare and number of passengers
+* **Scatter plot** of airfare and number of passengers  
 ```
-	twoway  (scatter fare passen if id==1, mcolor(blue) msymbol(circle) mfcolor(blue) mlcolor(blue)) /// 
-			(scatter fare passen if id==2, mcolor(green) msymbol(circle)) ///
-			(scatter fare passen if id==3, mcolor(magenta) msymbol(circle)) ///
-			(scatter fare passen if id==4, mcolor(yellow) msymbol(circle)), ///
-			ytitle(Average One-way Fare ($)) xtitle(Average Number of Passengers per Day) xtitle(, size(medium)) ///
-				legend(on order(1 "Akron,OH to Atlanta, GA" 2 "Akron, OH to Orlando, FL" 3 "Albany, NY to Atlanta, GA" 4 "Albany, NY to Chicago, IL"))
+twoway  (scatter fare passen if id==1, mcolor(blue) msymbol(circle) mfcolor(blue) mlcolor(blue)) /// 
+		(scatter fare passen if id==2, mcolor(green) msymbol(circle)) ///
+		(scatter fare passen if id==3, mcolor(magenta) msymbol(circle)) ///
+		(scatter fare passen if id==4, mcolor(yellow) msymbol(circle)), ///
+		ytitle(Average One-way Fare ($)) xtitle(Average Number of Passengers per Day) xtitle(, size(medium)) ///
+			legend(on order(1 "Akron,OH to Atlanta, GA" 2 "Akron, OH to Orlando, FL" 3 "Albany, NY to Atlanta, GA" 4 "Albany, NY to Chicago, IL"))
+```
+
 * **Scatter plot** of airfare by route ID
 ```
 bysort id: egen yi_mean=mean(fare)
