@@ -62,27 +62,22 @@ twoway  (scatter votepct money if state1==5, msize(small) mcolor(black) msymbol(
 **Micro level:**  <img src="http://latex.codecogs.com/gif.latex?votepct_ij%20%3D%20%5Cbeta_0_j%20&plus;%20r_i_j"/>  
 **Macro level:**  <img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cmu_0_j"/>  
 **Full model:** <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cmu_0_j%20&plus;%20r_i_j"/>  
- 
- <img src="http://latex.codecogs.com/gif.latex?votepct_i_j"/> = % of pro-tobacco voting for the ith legislator in particular state (jth state)  
- 
- <img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j"/> = mean outcome (votepct) for the jth state   
- 
- <img src="http://latex.codecogs.com/gif.latex?r_i_j"/> = level-1 error, normally distributed with mean of zero and variance σ<sup>2</sup> (person effect)  
- 
- <img src="http://latex.codecogs.com/gif.latex?%5Cmu_0_j"/> = random effect associated with state j, with mean of zero and variance τ00 (group effect)
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j"/> = % of pro-tobacco voting for the ith legislator in particular state (jth state)  
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j"/> = mean outcome (votepct) for the jth state   
+<img src="http://latex.codecogs.com/gif.latex?r_i_j"/> = level-1 error, normally distributed with mean of zero and variance σ<sup>2</sup> (person effect)  
+<img src="http://latex.codecogs.com/gif.latex?%5Cmu_0_j"/> = random effect associated with state j, with mean of zero and variance τ00 (group effect)
 
-
- ```
+```
 mixed votepct || state1:
 est store m0
 ```
+**Interpret the parameter estimates from Stata output**
+* _cons  = coefficient and CI of the constant and is the grand mean.
+* var(_cons)  = represents the variance group of intercepts (between states).
+* var(Residual) = is the variance within groups (comparing legislators within states).
 
-* Interpret the parameter estimates from Stata output  
-  * _cons  = coefficient and CI of the constant and is the grand mean
-  * var(_cons)  = represents the variance group of intercepts (between states).
-  * var(Residual) = is the variance within groups (comparing legislators within states) 
 
-* Because we have no predictors there is only one fixed effect, the grand mean (_cons), whose estimate is 0.53, we interpret it as the average value of the dependent variable across all subjects. That is, a typical representative or senator is expected to vote pro-tobacco slightly more than half of the time. Another way of saying this is -- the grand mean is the expected value of the voting behavior score for a random legislator in a randomly drawn state.
+Because we have no predictors there is only one fixed effect, the grand mean (_cons), whose estimate is 0.53, we interpret it as the average value of the dependent variable across all subjects. That is, a typical representative or senator is expected to vote pro-tobacco slightly more than half of the time. Another way of saying this is -- the grand mean is the expected value of the voting behavior score for a random legislator in a randomly drawn state.
 
 * The likelihood ratio test at the bottom of the output compares the random intercept model we ran to a linear model with only one intercept. The chi-sq test indicates that our data do not support the single-intercept model (we reject the null hypothesis).   
 
@@ -100,7 +95,6 @@ di  0.0353/(0.0353+0.0926)
 * postestimation command
 estat icc
 ```
-
 * If the ICC of the null model is zero (or very close to it, e.g. <0.1), that means the observations within clusters are no more similar than observations from different clusters and you can use a simpler analysis technique (e.g. regular OLS)   
 ***
 ### Part II. Random intercept model with level 1 predictors
@@ -224,10 +218,30 @@ twoway (line yhat_m2 money) (lfit votepct money, lpattern(dash)) (scatter votepc
 
 ***
 ### Part IV. Random slope, random coefficient model with level-two and level-one predictors
+**Research question:** Does the amount of tobacco harvested (acre-state-level variable) affect pro-tobacco voting behavior? 
+<br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMicro%20Level%3A%20%7D"/>
+<br>
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%3D%5Cbeta_0_j%20&plus;%20%5Cbeta_1_j%28party%29_i_j%20&plus;%20%5Cbeta_2_j%28money%29_i_j%20&plus;%20r_i_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMacro%20Level%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_0_1%28acres%29_j&plus;%20%5Cmu_0_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_1_j%20%3D%20%5Cgamma_1_0%20&plus;%20%5Cmu_1_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_2_j%20%3D%20%5Cgamma_2_0"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BFull%20Model%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_0_1%28acres%29_j%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20%5Cmu_1_j%28party%29_i_j%20&plus;%20r_i_j"/> <br>
+<p>
+
+Where: 
+> γ01(acres) = effect of state-level tobacco acreage on pro-tobacco voting.
+
+Note that in this model, acres only influences the intercept (B<sub>0j</sub>)
 
 * Model 3. Random slope + level-2 predictor (acres)
-	mixed votepct party money acres || state1: party, cov(un)
-	est store m3
-
-	estat icc
-	lrtest m2 m3, stats
+```
+mixed votepct party money acres || state1: party, cov(un)
+est store m3
+estat icc
+lrtest m2 m3, stats
+```
+**Interpret the results**
+* Fixed effects:  
