@@ -244,4 +244,4 @@ estat icc
 lrtest m2 m3, stats
 ```
 **Interpret the results**
-* Fixed effects:  
+* Fixed effects:*
