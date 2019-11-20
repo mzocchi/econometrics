@@ -157,14 +157,13 @@ lrtest m0 m1, stats
 <p>
 
 Where:  
+
 >γ00 = average of the state means on voting percent across the population of states  
 γ10 = the average party regression slope across states  
 γ20 = the average money regression slope. We do not allow this to vary across states.  
 μ0j = the unique deviation of the intercept of each state from the overall intercept γ00.  
 μ1j = the unique deviation of the slope within each group from the overall slope γ10. We allow the slope for party to vary across states. In other words, we are stipulating that individual voting behavior is related to party AND that the relationship between party and voting can vary from state to state.  
 rij = level-1 error, normally distributed with mean of zero and variance σ2 (person effect)
->
-
 
 We may want to graph the relationship between voting behavior and money by party to have a sense  if the effect of party affiliation on voting vary by state.
 ```
@@ -230,7 +229,8 @@ twoway (line yhat_m2 money) (lfit votepct money, lpattern(dash)) (scatter votepc
 <p>
 
 Where:  
-> γ01(acres) = effect of state-level tobacco acreage on pro-tobacco voting.
+
+>γ01(acres) = effect of state-level tobacco acreage on pro-tobacco voting.
 
 Note that in this model, acres only influences the intercept (B<sub>0j</sub>)
 
