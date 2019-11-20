@@ -107,20 +107,13 @@ estat icc
 
 * For this question, we will used two level-1 predictors (party & money), and no level-2 predictors.  We allow the intercept to vary by state and assume that the other effects are fixed. Therefore the model has 3 fixed effects and 2 random effects. The γ’s are the fixed effects (intercept, party, money) and the μ’s and r’s are the random effects. 
 
-<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMicro%20Level%3A%20%7D"/>
-<br>
-<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%3D%5Cbeta_0_j%20&plus;%20%5Cbeta_1_j%28party%29_i_j%20&plus;%20%5Cbeta_2_j%28money%29_i_j%20&plus;%20r_i_j"/>
-<br>
-<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMacro%20Level%3A%20%7D"/>
-<br>
-<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cmu_0_j"/>  
-<br>
-<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_1_j%20%3D%20%5Cgamma_1_0"/>
-<br>
-<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_2_j%20%3D%20%5Cgamma_2_0"/>
-<br>
-<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BFull%20Model%3A%20%7D"/>  
-<br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMicro%20Level%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%3D%5Cbeta_0_j%20&plus;%20%5Cbeta_1_j%28party%29_i_j%20&plus;%20%5Cbeta_2_j%28money%29_i_j%20&plus;%20r_i_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMacro%20Level%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cmu_0_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_1_j%20%3D%20%5Cgamma_1_0"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_2_j%20%3D%20%5Cgamma_2_0"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BFull%20Model%3A%20%7D"/> <br>
 <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20r_i_j"/>  
 
 ```
@@ -139,9 +132,10 @@ estat icc
 **Compare models**
 * We can run a likelihood ratio test to compare models.  The null hypothesis is that there is no significant differences between the models.  Here, we can reject the null and conclude that model #1 is better that the null model.
 
-  ```
+```
 lrtest m0 m1, stats
 ```
+
 ***
 ### Part III. Random slope model with level 1 predictors
 **Research question:** Does the effect of party on voting behavior vary by state, controlling for money? 
