@@ -156,7 +156,7 @@ lrtest m0 m1, stats
 <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20%5Cmu_1_j%28party%29_i_j%20&plus;%20r_i_j"/>
 <p>
 
-Where:  
+Where: <br>
 
 >γ00 = average of the state means on voting percent across the population of states  
 γ10 = the average party regression slope across states  
@@ -229,7 +229,7 @@ twoway (line yhat_m2 money) (lfit votepct money, lpattern(dash)) (scatter votepc
 <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_0_1%28acres%29_j%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20%5Cmu_1_j%28party%29_i_j%20&plus;%20r_i_j"/> <br>
 <p>
 
-Where:  
+Where:  <br>
 
 >γ01(acres) = effect of state-level tobacco acreage on pro-tobacco voting.
 
