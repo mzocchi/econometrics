@@ -118,7 +118,6 @@ estat icc
 <img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BFull%20Model%3A%20%7D"/>  
 <br>
 <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20r_i_j"/>  
-<p>
 
 ```
 mixed votepct party money || state1:
