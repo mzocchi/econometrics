@@ -243,5 +243,88 @@ est store m3
 estat icc
 lrtest m2 m3, stats
 ```
+
+**Interpret the results**  
+*Fixed effects:*  
+Political party and PAC contributions are highly significant level-1 predictors (p<0.001), tobacco acreage is significant at the 90% level but its effect appear to be small (for every additional 1,000 acres of tobacco harvested in a state, we would expect to see an increase of pro-tobacco voting of about 0.06%. 
+  
+*Random effects:*  
+Var(_cons): like in the previous models, this variance component represents the variation  or the deviation of each state’s intercept from the overall intercept.  
+Var(party): this represents the deviation of each state’s slope from the overall slope term for party, controlling for all other variables in the model.  
+
+***
+### Part V. Random slope model with cross-level interactions
+
+**Research question:** Does the amount of tobacco harvested (acre- state level variable) strengthen the effects of party and money on voting behavior? 
+
+The next logical extension of this model is to allow tobacco acreage to include the slopes of the two level-1 predictors, party and money:  
+
+<br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMicro%20Level%3A%20%7D"/>
+<br>
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%3D%5Cbeta_0_j%20&plus;%20%5Cbeta_1_j%28party%29_i_j%20&plus;%20%5Cbeta_2_j%28money%29_i_j%20&plus;%20r_i_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BMacro%20Level%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_0_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_0_1%28acres%29_j&plus;%20%5Cmu_0_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_1_j%20%3D%20%5Cgamma_1_0%20&plus;%20%5Cgamma_1_1%28acres%29_j%20&plus;%20%5Cmu_1_j"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?%5Cbeta_2_j%20%3D%20%5Cgamma_2_0%20&plus;%20%5Cgamma_2_1%28acres%29_j"/> <br>
+
+<img src="http://latex.codecogs.com/gif.latex?%5Ctextbf%7BFull%20Model%3A%20%7D"/> <br>
+<img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_0_1%28acres%29_j%29&plus;%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_1_1%28acres%29_j%28party%29_i_j"/>
+<img src="http://latex.codecogs.com/gif.latex?&plus;%20%5Cgamma_2_0%28money%29_ij%20&plus;%20%5Cgamma_2_1%28acres%29_j%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20%5Cmu_1_j%28party%29_i_j%20&plus;%20r_i_j"/><br>
+
+* Looking at the full model, we see that we have to include two interaction terms to examine the cross-level effects: 1) party and acres, and 2) money and acres:
+
+```
+mixed votepct acres party c.acres#i.party money c.acres#c.money || state1: party, cov(un) var
+```
+
 **Interpret the results**
-* Fixed effects:*
+
+**Fixed effects:**  
+Tobacco acreage (acres) significantly affects the average voting level in a state (remember that we have acres in the intercept equation), but there are also significant cross-level interactions. The negative coefficient for the two interactions indicate that the presence of tobacco farming ‘dampens’ or reduces the effect of being Republican and the effect of receiving money.  
+
+It can be difficult to interpret all the effects in a complex multi-level model. A simple plot of the predicted values can be helpful.  
+
+As an example, this graph shows the expected voting percentages for Democratic legislators for three different levels of tobacco acreage. 
+
+```
+twoway (lfit yhat_m4 money if state1==14, range(0 100)) (lfit yhat_m4 money if state1==10, range(0 100)) (lfit yhat_m4 money if state1==27, range(0 100)) if party==0, legend(order(1 "Low acreage (IL)" 2 "Moderate acreage (GA)" 3 "High acreage (NC)")) ylabel(0(.2)1) xtitle("PAC Money") ytitle("Predicted Voting-Democrat (%)")
+```
+
+* The solid line shows the relationship of tobacco PAC money (in $1000s) on voting in a state like Illinois, where there is no tobacco acreage. 
+* The dashed line in the middle shows the relationship of tobacco money in a state like Georgia, which has a moderate level of tobacco acreage (33,000 acres).
+* The dotted line at the top shows the effect of tobacco money in a state like North Carolina, which has a high level of tobacco acreage (200,000 acres).
+* In general, the more money accepted by Democratic legislators, the more likely they are to vote pro-tobacco. However, this figure shows that the relationship is *mediated* by the amount of tobacco acreage in that legislator's state. States with more tobacco acres are more likely to vote pro-tobacco (higher intercepts), but at the same time, the effect of tobacco PAC money is lessened.
+
+***
+### Part VI. Model Diagnostics
+
+Two of the most important assumptions of a multi-level model can be empirically tested:  
+1. the level-1 (within-group) errors are independent and normally distributed with a mean of zero.  
+2. the random effects are normally distributed with a mean of zero, and are independent across groups. 
+
+**Boxplot of level-1 residuals**  
+This plot can be used to determine if the residuals are centered at 0 and the the variances are constant across groups.
+```
+graph hbox r4, over(state1, sort(gsp) descending label(labsize(vsmall))) intensity(0) medtype(cline) medline(lcolor(black)) yline(0, lcolor(black)) scheme(s1mono) xsize(4) ysize(8)
+```
+* One interesting finding from this plot is that it appears that the outliers (i.e most likely to vote differently than expected) are from the states with the largest population.
+
+**Scatter plot of level-1 standardized residuals**
+```	
+twoway  (scatter rs4 yhat_m4, msymbol(oh)) (scatter rs4 yhat_m4 if rs>2, msymbol(none) mlabel(state1)) (scatter rs4 yhat_m4 if rs<-2, msymbol(none) mlabel(state1)) (lfit rs4 yhat_m4), by(party, legend(off) note("")) scheme(s1mono) xtitle(Fitted values) ytitle(Standardized residuals) ylabel(,angle(horiz))
+```
+* The residuals appear to be centered at zero and there may be some problems with heteroskedasicity among the democrats. Residuals increase as the predicted values increase.
+
+**Normal QQ-plot of level-1 residuals**  
+```
+qnorm r4 if party==0
+qnorm r4 if party==1
+```
+
+**Normal QQ-plot of level-2 residuals**
+```
+qnorm u1
+qnorm u2
+```
+* These plots are not as smooth as before, because there are only 50 level-2 residuals (50 states) opposed to 527 level-1 residuals (members of congress). 
