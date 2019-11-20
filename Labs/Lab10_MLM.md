@@ -97,10 +97,11 @@ di  0.0353/(0.0353+0.0926)
 * postestimation command
 estat icc
 ```
-* If the ICC of the null model is zero (or very close to it, e.g. <0.1), that means the observations within clusters are no more similar than observations from different clusters and you can use a simpler analysis technique (e.g. regular OLS). 
+* If the ICC of the null model is zero (or very close to it, e.g. \<0.1), that means the observations within clusters are no more similar than observations from different clusters and you can use a simpler analysis technique (e.g. regular OLS).  
 
 ***
 ### Part II. Random intercept model with level 1 predictors
+
 
 **Research question:** Does voting behavior vary by state, controlling for party affiliation and money?
 
