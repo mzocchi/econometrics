@@ -71,13 +71,15 @@ twoway  (scatter votepct money if state1==5, msize(small) mcolor(black) msymbol(
 mixed votepct || state1:
 est store m0
 ```
-**Interpret the parameter estimates from Stata output**
-* _cons  = coefficient and CI of the constant and is the grand mean.
-* var(_cons)  = represents the variance group of intercepts (between states).
+
+Interpret the parameter estimates from Stata output
+
+* \_cons  = coefficient and CI of the constant and is the grand mean.
+* var(\_cons)  = represents the variance group of intercepts (between states).
 * var(Residual) = is the variance within groups (comparing legislators within states).
 
 
-Because we have no predictors there is only one fixed effect, the grand mean (_cons), whose estimate is 0.53, we interpret it as the average value of the dependent variable across all subjects. That is, a typical representative or senator is expected to vote pro-tobacco slightly more than half of the time. Another way of saying this is -- the grand mean is the expected value of the voting behavior score for a random legislator in a randomly drawn state.
+Because we have no predictors there is only one fixed effect, the grand mean (\_cons), whose estimate is 0.53, we interpret it as the average value of the dependent variable across all subjects. That is, a typical representative or senator is expected to vote pro-tobacco slightly more than half of the time. Another way of saying this is -- the grand mean is the expected value of the voting behavior score for a random legislator in a randomly drawn state.
 
 * The likelihood ratio test at the bottom of the output compares the random intercept model we ran to a linear model with only one intercept. The chi-sq test indicates that our data do not support the single-intercept model (we reject the null hypothesis).   
 
@@ -85,7 +87,7 @@ Because we have no predictors there is only one fixed effect, the grand mean (_c
 
  <img src="http://latex.codecogs.com/gif.latex?%5Ctextup%7BICC%7D%3D%20%5Cfrac%7Bvar%28%5Cmu_o_j%29%7D%7Bvar%28%5Cmu_o_j%29&plus;%20var%28r_i_j%29%7D"/>  
 
-* In Stata, var(_cons) is the estimate of var(u0j) and var(residual) is the estimate of var(rij) . 
+* In Stata, var(\_cons) is the estimate of var(u0j) and var(residual) is the estimate of var(rij) . 
 
 ```
 * manual calc = var(_cons) / var(Residual) + var(_cons)
@@ -95,7 +97,8 @@ di  0.0353/(0.0353+0.0926)
 * postestimation command
 estat icc
 ```
-* If the ICC of the null model is zero (or very close to it, e.g. <0.1), that means the observations within clusters are no more similar than observations from different clusters and you can use a simpler analysis technique (e.g. regular OLS)   
+* If the ICC of the null model is zero (or very close to it, e.g. <0.1), that means the observations within clusters are no more similar than observations from different clusters and you can use a simpler analysis technique (e.g. regular OLS). 
+
 ***
 ### Part II. Random intercept model with level 1 predictors
 
@@ -126,7 +129,7 @@ estat icc
 ```
 
 **Interpret the model results**  
-* _cons (γ00) = 0.200. This is no longer interpreted as the grand mean of voting percentage, but rather as the expected value of voting percentage when all of the predictors (party and money) are zero. So according to these data Democratic legislators (Party=0) who have received no money from tobacco industry PACs are expected to vote pro-tobacco 20% of the time. 
+* \_cons (γ00) = 0.200. This is no longer interpreted as the grand mean of voting percentage, but rather as the expected value of voting percentage when all of the predictors (party and money) are zero. So according to these data Democratic legislators (Party=0) who have received no money from tobacco industry PACs are expected to vote pro-tobacco 20% of the time. 
 * party (γ10) = 0.496, which tells us that the effect of being Republican is to vote pro-tobacco 49.6% more often compared to Democrats. 
 * money (γ20) = 0.00447, which means that for every $1000 received by a legislator we would expect to see an increase in pro-tobacco voting of approximately 0.45%.
 * The random effect part of the model is concerned with the variance components. The random variables u0j should be interpreted as residuals at the group level or group effects that are unexplained by level-1 variables. This information should be used to decide whether we should add more variables to the model or to stop adding variables at the particular level.
@@ -182,12 +185,12 @@ estat icc
 
 **Interpret the model results**  
 *Fixed effects: Note changes from model 1*  
-* _cons(γ00) = 0.213. This is the expected value of voting percentage when all of the predictors are zero. So according to these data, Democratic legislators (Party=0) who received no money from tobacco industry PACs are expected to vote pro-tobacco 21.3% of the time.
+* \_cons(γ00) = 0.213. This is the expected value of voting percentage when all of the predictors are zero. So according to these data, Democratic legislators (Party=0) who received no money from tobacco industry PACs are expected to vote pro-tobacco 21.3% of the time.
 * party (γ10) = 0.489, which tells us that the effect of being Republican is to vote pro-tobacco 48.9 percentage-points more often compared to Democrats. 
 * money (γ20)= 0.0042, which means that for every $1000 received by a legislator we would expect to see an increase in pro-tobacco voting of approximately 0.42 percentage points.
 
 *Random effects:*
-* var(_cons) represents the variance of voting behavior across states, after controlling for the effects of party and money.  It is a measure of deviation of each state’s intercept from the overall intercept
+* var(\_cons) represents the variance of voting behavior across states, after controlling for the effects of party and money.  It is a measure of deviation of each state’s intercept from the overall intercept
 * Var(party) tells us the variation of the effect of party on voting across states, controlling for money. In other words, it measures the deviation of each state’s slope from the overall slope for party.
 
 **Compare models**  
@@ -248,7 +251,7 @@ lrtest m2 m3, stats
 Political party and PAC contributions are highly significant level-1 predictors (p<0.001), tobacco acreage is significant at the 90% level but its effect appear to be small (for every additional 1,000 acres of tobacco harvested in a state, we would expect to see an increase of pro-tobacco voting of about 0.06%. 
   
 *Random effects:*  
-Var(_cons): like in the previous models, this variance component represents the variation  or the deviation of each state’s intercept from the overall intercept.  
+Var(\_cons): like in the previous models, this variance component represents the variation  or the deviation of each state’s intercept from the overall intercept.  
 Var(party): this represents the deviation of each state’s slope from the overall slope term for party, controlling for all other variables in the model.  
 
 ***
