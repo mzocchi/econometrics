@@ -156,7 +156,7 @@ lrtest m0 m1, stats
 <img src="http://latex.codecogs.com/gif.latex?votepct_i_j%20%3D%20%5Cgamma_0_0%20&plus;%20%5Cgamma_1_0%28party%29_i_j%20&plus;%20%5Cgamma_2_0%28money%29_i_j%20&plus;%20%5Cmu_0_j%20&plus;%20%5Cmu_1_j%28party%29_i_j%20&plus;%20r_i_j"/>
 <p>
 
-Where: 
+Where:  
 >γ00 = average of the state means on voting percent across the population of states  
 γ10 = the average party regression slope across states  
 γ20 = the average money regression slope. We do not allow this to vary across states.  
