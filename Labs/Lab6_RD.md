@@ -82,7 +82,8 @@ predict allfitqi
 twoway  (scatter all agecell) ///
 	(line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(medium) lpattern(dash)) ///
 	(line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(medium) lpattern(dash)) ///
-	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
+	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
+	ylabel(80(5)115, angle(horiz)) legend(off) ///
 	title("Figure 2." "Quadratic control in an RD design", size(medium))
 ```
 
@@ -139,7 +140,8 @@ twoway	(scatter  mva internal agecell) ///
 	(line mvafitqi infitqi agecell if agecell < 21) ///
 	(line mvafitqi infitqi agecell if agecell >= 21), ///
 	text(28 20.1 "Motor Vehicle Fatalities") text(17 22 "Deaths from Internal Causes") ///
-	xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(10(5)40, angle(horiz)) legend(off) ///
+	xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
+	ylabel(10(5)40, angle(horiz)) legend(off) ///
 	title("Figure 3." "RD Estimates of MLDA effects on mortality by cause of death", size(medium))
 ```
 
