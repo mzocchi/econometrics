@@ -58,11 +58,11 @@ predict allfitlin
 * Let's plot the results from the first model using the observed and predicted values
 ``` 
 twoway  (scatter all agecell) ///
-	(line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
-	(line allfitlin agecell if age >= 0, lcolor(black) lwidth(medium)) ///
-	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) /// 
-	ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
-	title("Figure 1." "A sharp RD estimate of MLDA mortality effects", size(medium))
+  (line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
+  (line allfitlin agecell if age >= 0, lcolor(black) lwidth(medium)) ///
+  , xline(21, lcolor(black) lpattern(dash)) xtitle(Age) /// 
+  ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
+  title("Figure 1." "A sharp RD estimate of MLDA mortality effects", size(medium))
 ```
 
 * In *sharp* RD designs, treatment switches cleanly off or on as the the running variable (e.g. age) passes a cutoff. The MLDA is a sharp function of age, so investigation of MLDA effects on mortality is a sharp RD study.
@@ -81,11 +81,11 @@ predict allfitqi
 * Now, let's look at the graph of these results
 ```
 twoway  (scatter all agecell) ///
-	(line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(medium) lpattern(dash)) ///
-	(line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(medium) lpattern(dash)) ///
-	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
-	ylabel(80(5)115, angle(horiz)) legend(off) ///
-	title("Figure 2." "Quadratic control in an RD design", size(medium))
+  (line allfitlin allfitqi agecell if age < 0,  lcolor(red black) lwidth(medium) lpattern(dash)) ///
+  (line allfitlin allfitqi agecell if age >= 0, lcolor(red black) lwidth(medium) lpattern(dash)) ///
+  , xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
+  ylabel(80(5)115, angle(horiz)) legend(off) ///
+  title("Figure 2." "Quadratic control in an RD design", size(medium))
 ```
 
 * The fancy model seems to fit the data better than the linear model: Death rates jump sharply at age 21, but then recover somewhat quickly in the first few months.
@@ -138,18 +138,18 @@ label variable exfitqi  "Mortality rate (per 100,000)"
 * First we examine the results visually:
 ```
 twoway	(scatter  mva internal agecell) ///
-	(line mvafitqi infitqi agecell if agecell < 21) ///
-	(line mvafitqi infitqi agecell if agecell >= 21), ///
-	text(28 20.1 "Motor Vehicle Fatalities") text(17 22 "Deaths from Internal Causes") ///
-	xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
-	ylabel(10(5)40, angle(horiz)) legend(off) ///
-	title("Figure 3." "RD Estimates of MLDA effects on mortality by cause of death", size(medium))
+  (line mvafitqi infitqi agecell if agecell < 21) ///
+  (line mvafitqi infitqi agecell if agecell >= 21), ///
+  text(28 20.1 "Motor Vehicle Fatalities") text(17 22 "Deaths from Internal Causes") ///
+  xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ///
+  ylabel(10(5)40, angle(horiz)) legend(off) ///
+  title("Figure 3." "RD Estimates of MLDA effects on mortality by cause of death", size(medium))
 ```
 
 * Now, let's look at the results from the regression:
 ```
 esttab mva_simple internal_simple mva_fancy internal_fancy, b(2) se(2) ///
-	title("Table 2. Sharp RD estimates of MLDA effects on mortality by cause of death")
+  title("Table 2. Sharp RD estimates of MLDA effects on mortality by cause of death")
 ```
 
 * The figure and regression results should help convince the skeptic. We see a clear jump in mortality at the MLDA cutoff for MVA, with no evidence of a non-linear trend. We also do not see much of a change in mortality from internal causes at the cutoff - the jump is insignificant.
@@ -166,11 +166,11 @@ predict allfitlin2021
 
 ```
 twoway	(scatter all agecell) ///
-	(line allfitlin2021 agecell if age <0, lcolor(black) lwidth(medthick)) ///
-	(line allfitlin2021 agecell if age >=0, lcolor(black red) lwidth(medthick medthick)) ///
-	if agecell>=20 & agecell<=22 ///
-	, xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz)) ///
-	title("Figure 4." "A sharp RD estimate of MLDA mortality effects (ages 20-22)", size(medium))
+  (line allfitlin2021 agecell if age <0, lcolor(black) lwidth(medthick)) ///
+  (line allfitlin2021 agecell if age >=0, lcolor(black red) lwidth(medthick medthick)) ///
+  if agecell>=20 & agecell<=22 ///
+  , xline(21, lcolor(black) lpattern(dash)) legend(off) ylabel(80(5)115, angle(horiz)) ///
+  title("Figure 4." "A sharp RD estimate of MLDA mortality effects (ages 20-22)", size(medium))
 ```
 
 ```
