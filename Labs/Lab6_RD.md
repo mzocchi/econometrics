@@ -60,7 +60,8 @@ predict allfitlin
 twoway  (scatter all agecell) ///
 	(line allfitlin agecell if age < 0, lcolor(black) lwidth(medium)) ///
 	(line allfitlin agecell if age >= 0, lcolor(black) lwidth(medium)) ///
-	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
+	, xline(21, lcolor(black) lpattern(dash)) xtitle(Age) /// 
+	ytitle("Mortality rate (per 100,000)") ylabel(80(5)115, angle(horiz)) legend(off) ///
 	title("Figure 1." "A sharp RD estimate of MLDA mortality effects", size(medium))
 ```
 
